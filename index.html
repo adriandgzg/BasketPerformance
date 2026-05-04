@@ -3,1013 +3,614 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Basketball Elite Plan</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<title>Basketball Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --orange: #FF5E1A;
-    --black: #0A0A0A;
-    --card: #181818;
-    --card2: #1E1E1E;
-    --line: #2A2A2A;
-    --text: #E8E8E8;
-    --muted: #888;
-    --gold: #F5C842;
-    --green: #3DDB82;
-    --blue: #4AABFF;
-    --yt: #FF0000;
-  }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body { background: var(--black); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px; line-height: 1.6; -webkit-text-size-adjust: 100%; }
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+:root{
+  --bg:#F2F2F7;--s:#FFF;--s2:#F2F2F7;--bd:#D1D1D6;
+  --t:#1C1C1E;--sub:#8E8E93;--sub2:#3A3A3C;
+  --acc:#FF5E1A;--grn:#34C759;--gld:#FF9F0A;--yt:#FF0000;
+  --r:12px;--rs:9px;
+}
+body{background:var(--bg);color:var(--t);font-family:'DM Sans',-apple-system,sans-serif;font-size:15px;line-height:1.5;min-height:100vh}
 
+/* ── MODAL ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:900;display:flex;align-items:center;justify-content:center;padding:16px}
+.overlay.hidden{display:none}
+.modal{background:var(--s);border-radius:20px;padding:24px 20px 20px;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,.2);animation:up .25s ease}
+@keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.m-title{font-size:19px;font-weight:700;margin-bottom:2px}
+.m-sub{font-size:13px;color:var(--sub);margin-bottom:18px}
+.fl{font-size:11px;font-weight:600;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;margin-top:12px}
+.fl:first-of-type{margin-top:0}
+.modal input,.modal select{width:100%;background:var(--s2);border:1.5px solid var(--bd);border-radius:var(--rs);padding:10px 12px;color:var(--t);font-family:inherit;font-size:15px;outline:none;-webkit-appearance:none;transition:border-color .15s}
+.modal input:focus,.modal select:focus{border-color:var(--acc)}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.m-btn{width:100%;margin-top:18px;background:var(--acc);color:#fff;border:none;border-radius:var(--rs);padding:13px;font-family:inherit;font-size:16px;font-weight:600;cursor:pointer}
+.m-btn:active{opacity:.82}
 
+/* ── HEADER COMPACTO STICKY ── */
+.hdr{background:var(--s);border-bottom:1px solid var(--bd);padding:12px 14px 10px;position:sticky;top:0;z-index:100}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
+.hdr-name{font-size:16px;font-weight:700}
+.edit-btn{background:none;border:1.5px solid var(--acc);color:var(--acc);border-radius:20px;padding:3px 10px;font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.hchips{display:flex;gap:5px;flex-wrap:wrap}
+.hchip{background:var(--s2);border:1px solid var(--bd);border-radius:20px;padding:3px 9px;font-size:11px;font-weight:500;color:var(--sub2)}
+.hchip-acc{background:var(--acc);color:#fff;border:none;font-weight:700}
 
-  /* ── HERO ──────────────────────────────────────── */
-  .hero {
-    background: linear-gradient(135deg, #0A0A0A 0%, #1a0d00 60%, #0A0A0A 100%);
-    border-bottom: 2px solid var(--orange);
-    padding: 48px 18px 32px;
-    position: relative; overflow: hidden;
-  }
-  .hero::before { content:'🏀'; position:absolute; font-size:200px; right:-30px; top:-20px; opacity:0.05; line-height:1; pointer-events:none; }
-  .hero-label { font-family:'Space Mono',monospace; font-size:10px; color:var(--orange); letter-spacing:4px; text-transform:uppercase; margin-bottom:10px; }
-  .hero h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(40px,11vw,72px); line-height:0.9; letter-spacing:2px; margin-bottom:14px; }
-  .hero h1 span { color:var(--orange); }
-  .hero-sub { color:var(--muted); font-size:13px; max-width:380px; margin-bottom:20px; }
-  .stats-row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-  .stat-chip { background:rgba(255,94,26,0.12); border:1px solid rgba(255,94,26,0.35); border-radius:6px; padding:6px 12px; font-family:'Space Mono',monospace; font-size:11px; }
-  .stat-chip strong { color:var(--orange); display:block; font-size:15px; }
+/* ── PAGE ── */
+.page{max-width:680px;margin:0 auto;padding:0 12px 40px}
 
+/* ── ANÁLISIS COLAPSABLE ── */
+.abox{margin:10px 0}
+.atog{display:flex;align-items:center;justify-content:space-between;background:var(--s);border:1px solid var(--bd);border-radius:var(--r);padding:11px 14px;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none}
+.atog h3{font-size:13px;font-weight:600;color:var(--sub2)}
+.atog-lbl{font-size:12px;color:var(--sub);flex-shrink:0;margin-left:8px}
+.abody{display:none;padding-top:6px}.abody.open{display:block}
+.banner{border-radius:var(--r);padding:12px 13px;margin-bottom:7px;display:flex;gap:10px;align-items:flex-start}
+.b-green{background:#E8FAF0;border:1px solid #A8DFC0}
+.b-amber{background:#FFF5E6;border:1px solid #FFDAA0}
+.b-red{background:#FFF0EE;border:1px solid #FFBDB8}
+.b-blue{background:#EEF4FF;border:1px solid #B8CDFF}
+.bico{font-size:17px;flex-shrink:0;margin-top:1px}
+.bbody h4{font-size:12px;font-weight:700;margin-bottom:3px}
+.bbody p,.bbody li{font-size:12px;color:var(--sub2);line-height:1.5}
+.bbody ul{padding-left:14px}
+.key-card{background:var(--acc);border-radius:var(--r);padding:12px 14px;margin-bottom:7px}
+.key-card h3{font-size:13px;font-weight:700;color:#fff;margin-bottom:3px}
+.key-card p{font-size:12px;color:rgba(255,255,255,.92);line-height:1.55}
+.key-card b{color:#fff;font-weight:700}
+.close-anal{display:block;width:100%;text-align:center;background:none;border:none;font-family:inherit;font-size:12px;color:var(--sub);cursor:pointer;padding:6px 0 2px}
 
-  /* ── ANALYSIS BOX ─────────────────────────────── */
-  .analysis-box {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 18px;
-    margin-bottom: 14px;
-    border-left: 3px solid var(--orange);
-  }
-  .analysis-box h3 { font-family:'Bebas Neue',sans-serif; font-size:16px; color:var(--orange); margin-bottom:8px; }
-  .analysis-box p, .analysis-box li { font-size:13px; color:#ccc; line-height:1.6; }
-  .analysis-box ul { padding-left:16px; }
-  .analysis-box li { margin-bottom:3px; }
+/* ── SEC HEADER ── */
+.sec-hd{padding:16px 0 8px}
+.sec-lbl{font-size:10px;font-weight:700;color:var(--sub);letter-spacing:1.3px;text-transform:uppercase;margin-bottom:2px}
+.sec-title{font-size:18px;font-weight:700}
 
-  /* ── HIGHLIGHT BOX ────────────────────────────── */
-  .highlight-box { background:linear-gradient(135deg,#c43e08,#e04e10); border:none; border-radius:12px; padding:18px 20px; margin-bottom:20px; box-shadow: 0 4px 20px rgba(255,94,26,0.35); }
-  .highlight-box h3 { font-family:'Bebas Neue',sans-serif; font-size:22px; color:#fff; margin-bottom:6px; letter-spacing:1px; }
-  .highlight-box p { font-size:13.5px; color:rgba(255,255,255,0.92); line-height:1.65; }
-  .highlight-box p em { font-style:italic; color:#fff; font-weight:600; }
-  .highlight-box p strong { color:#fff; font-weight:700; }
+/* ── MONTH TABS ── */
+.mbar{display:flex;gap:5px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:2px 0 7px}
+.mbar::-webkit-scrollbar{display:none}
+.mtab{flex-shrink:0;padding:6px 13px;background:var(--s);border:1.5px solid var(--bd);border-radius:20px;font-size:12px;font-weight:600;color:var(--sub);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.mtab.active{background:var(--acc);border-color:var(--acc);color:#fff}
+.mpanel{display:none}.mpanel.active{display:block}
+.mhdr{background:var(--s);border:1px solid var(--bd);border-radius:var(--r);padding:12px 14px;margin-bottom:8px}
+.mhdr h2{font-size:15px;font-weight:700;margin-bottom:2px}
+.mhdr p{font-size:12px;color:var(--sub)}
+.pbadge{display:inline-block;margin-top:5px;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700}
+.pb1{background:#EEF4FF;color:#0047AF}.pb2{background:#FFF5E6;color:#8A5500}
+.pb3{background:#FFF0EE;color:#C0001A}.pb4{background:#E8FAF0;color:#0A6E2E}
 
-  /* ── SECTIONS ─────────────────────────────────── */
-  .section { padding:24px 16px; max-width:860px; margin:0 auto; }
-  .section-title { font-family:'Bebas Neue',sans-serif; font-size:26px; letter-spacing:1px; margin-bottom:4px; }
-  .section-title span { color:var(--orange); }
-  .section-line { height:2px; background:linear-gradient(90deg,var(--orange),transparent); margin-bottom:18px; }
-  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
-  @media(max-width:560px){ .two-col { grid-template-columns:1fr; } }
+/* ── DAY TABS ── */
+.dbar{display:flex;gap:4px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:2px 0 7px}
+.dbar::-webkit-scrollbar{display:none}
+.dtab{flex-shrink:0;padding:5px 11px;background:var(--s);border:1.5px solid var(--bd);border-radius:20px;font-size:12px;font-weight:600;color:var(--sub);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.dtab.active{background:var(--t);border-color:var(--t);color:#fff}
+.dpanel{display:none}.dpanel.active{display:block}
 
-  /* ── DAY TABS ─────────────────────────────────── */
-  .day-tabs { display:flex; gap:6px; overflow-x:auto; padding-bottom:4px; margin-bottom:16px; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
-  .day-tabs::-webkit-scrollbar { display:none; }
-  .day-tab { flex-shrink:0; background:var(--card2); border:1px solid var(--line); border-radius:8px; padding:8px 14px; font-family:'Bebas Neue',sans-serif; font-size:16px; letter-spacing:1px; cursor:pointer; color:var(--muted); transition:all 0.2s; -webkit-tap-highlight-color:transparent; }
-  .day-tab.active { background:var(--orange); border-color:var(--orange); color:#000; }
-  .day-panel { display:none; }
-  .day-panel.active { display:block; }
+/* ── DAY CARD ── */
+.day-card{background:var(--s);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-bottom:8px}
+.day-top{padding:11px 13px;border-bottom:1px solid var(--bd)}
+.day-top h2{font-size:15px;font-weight:700;margin-bottom:2px}
+.day-top p{font-size:12px;color:var(--sub)}
+.day-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}
+.tag{display:inline-block;border-radius:4px;padding:2px 6px;font-size:10px;font-weight:700}
+.tg{background:#EEF4FF;color:#0047AF}.tp{background:#E8FAF0;color:#0A6E2E}
+.tb{background:rgba(255,94,26,.1);color:var(--acc)}.ts{background:rgba(255,159,10,.1);color:#8A5500}
+.tr{background:var(--s2);color:var(--sub)}
 
-  /* ── DAY CARD ─────────────────────────────────── */
-  .day-header-bar { background:var(--card2); border:1px solid var(--line); border-radius:12px 12px 0 0; padding:14px 16px; border-bottom:2px solid var(--orange); }
-  .day-header-bar h2 { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:1px; }
-  .day-header-bar p { font-size:12px; color:var(--muted); margin-top:2px; }
-  .day-tag { display:inline-block; margin-top:6px; padding:3px 10px; border-radius:20px; font-size:10px; font-family:'Space Mono',monospace; }
-  .tag-gym { background:rgba(74,171,255,0.15); color:var(--blue); border:1px solid rgba(74,171,255,0.3); }
-  .tag-basket { background:rgba(255,94,26,0.15); color:var(--orange); border:1px solid rgba(255,94,26,0.3); }
-  .tag-doble { background:rgba(245,200,66,0.15); color:var(--gold); border:1px solid rgba(245,200,66,0.3); }
-  .tag-rest { background:rgba(61,219,130,0.1); color:var(--green); border:1px solid rgba(61,219,130,0.2); }
-  .day-body { background:var(--card); border:1px solid var(--line); border-top:none; border-radius:0 0 12px 12px; padding:16px; }
+/* ── PROGRESS BAR ── */
+.day-prog{padding:8px 13px 4px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--bd)}
+.prog-bar{flex:1;height:3px;background:var(--s2);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:var(--grn);border-radius:3px;transition:width .25s}
+.prog-lbl{font-size:10px;font-weight:600;color:var(--sub);font-family:'DM Mono',monospace;min-width:24px;text-align:right}
+.reset-row{display:flex;justify-content:flex-end;padding:5px 13px 0}
+.reset-btn{background:none;border:none;font-family:inherit;font-size:11px;color:var(--sub);cursor:pointer;padding:2px 0;-webkit-tap-highlight-color:transparent;text-decoration:underline}
 
-  /* ── BLOCK ────────────────────────────────────── */
-  .block { margin-bottom:20px; }
-  .block-title { font-family:'Space Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--orange); margin-bottom:10px; display:flex; align-items:center; gap:8px; }
-  .block-title::after { content:''; flex:1; height:1px; background:var(--line); }
+/* ── SESSION BLOCK ── */
+.sb{border-bottom:1px solid var(--bd)}.sb:last-child{border-bottom:none}
+.sh{display:flex;align-items:center;gap:8px;padding:10px 13px;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none}
+.sico{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.ig{background:#EEF4FF}.ip{background:#E8FAF0}.ib{background:rgba(255,94,26,.1)}.is{background:rgba(255,159,10,.1)}.ir{background:var(--s2)}
+.sm{flex:1}
+.sn{font-size:13px;font-weight:600}
+.st{font-size:11px;color:var(--sub);margin-top:1px}
+.sch{font-size:12px;color:var(--bd);transition:transform .15s;flex-shrink:0}
+.sb.open .sch{transform:rotate(90deg)}
+.sbd{display:none;padding:0 13px 11px}.sb.open .sbd{display:block}
 
-  /* ── EXERCISE ITEM ────────────────────────────── */
-  .exercise-list { display:flex; flex-direction:column; gap:10px; }
-  .exercise-item { background:var(--black); border:1px solid var(--line); border-radius:10px; padding:12px 14px; }
-  .ex-top { display:flex; align-items:flex-start; gap:10px; margin-bottom:9px; }
-  .ex-icon { font-size:18px; flex-shrink:0; margin-top:1px; }
-  .ex-info { flex:1; }
-  .ex-name { font-weight:600; font-size:14px; line-height:1.3; }
-  .ex-detail { font-size:12px; color:var(--muted); margin-top:3px; line-height:1.5; }
-  .ex-sets { font-family:'Space Mono',monospace; font-size:11px; color:var(--orange); white-space:nowrap; flex-shrink:0; margin-top:2px; background:rgba(255,94,26,0.1); border:1px solid rgba(255,94,26,0.25); border-radius:5px; padding:2px 7px; }
+/* ── EXERCISE + CHECKBOX ── */
+.ex{padding:9px 0;border-bottom:1px solid var(--bd);transition:opacity .2s}
+.ex:last-child{border-bottom:none}
+.ex.done{opacity:.4}
+.ex-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px}
+.ex-chk{flex-shrink:0;margin-top:1px;width:22px;height:22px;border-radius:6px;border:2px solid var(--bd);background:var(--s);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;-webkit-tap-highlight-color:transparent;min-width:22px}
+.ex-chk.on{background:var(--grn);border-color:var(--grn)}
+.ex-chk.on::after{content:'✓';color:#fff;font-size:13px;font-weight:700;line-height:1}
+.ex-main{flex:1;min-width:0}
+.ex-name{font-size:13px;font-weight:600;line-height:1.3}
+.ex.done .ex-name{text-decoration:line-through;color:var(--sub)}
+.ex-note{font-size:11.5px;color:var(--sub);margin-top:2px;line-height:1.45}
+.ex-sets{background:var(--s2);border:1px solid var(--bd);border-radius:5px;padding:2px 7px;font-size:10px;font-weight:600;font-family:'DM Mono',monospace;white-space:nowrap;flex-shrink:0;margin-top:1px}
+.ex-diff{display:inline-block;margin-top:3px;padding:1px 5px;border-radius:4px;font-size:9px;font-weight:700}
+.d-new{background:#EEF4FF;color:#0047AF}.d-up{background:#E8FAF0;color:#0A6E2E}
 
-  /* ── VIDEO BUTTON ─────────────────────────────── */
-  .video-btn {
-    display:flex; align-items:center; gap:9px;
-    background:rgba(255,0,0,0.07);
-    border:1px solid rgba(255,80,80,0.25);
-    border-radius:8px; padding:9px 12px;
-    text-decoration:none; color:#ff7070;
-    font-size:12px; font-family:'Space Mono',monospace;
-    transition:background 0.2s; -webkit-tap-highlight-color:transparent;
-    width:100%; cursor:pointer;
-  }
-  .video-btn:hover, .video-btn:active { background:rgba(255,0,0,0.16); }
-  .yt-icon { width:24px; height:17px; background:var(--yt); border-radius:4px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-  .yt-icon::after { content:''; border-left:8px solid white; border-top:5px solid transparent; border-bottom:5px solid transparent; margin-left:2px; }
-  .video-btn span.vt { flex:1; }
-  .video-btn .varr { font-size:11px; color:var(--muted); }
+/* ── VIDEO ── */
+.vlink{display:flex;align-items:center;gap:6px;background:rgba(255,0,0,.04);border:1px solid rgba(255,0,0,.13);border-radius:var(--rs);padding:6px 10px;text-decoration:none;color:#C0001A;font-size:11.5px;font-weight:500;-webkit-tap-highlight-color:transparent}
+.vlink:active{background:rgba(255,0,0,.09)}
+.ytpill{background:var(--yt);border-radius:3px;width:20px;height:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ytpill::after{content:'';border-left:6px solid #fff;border-top:4px solid transparent;border-bottom:4px solid transparent;margin-left:1px}
+.vt{flex:1}.varr{font-size:10px;color:var(--sub)}
 
-  /* ── INTENSITY ────────────────────────────────── */
-  .intensity-bar { display:flex; align-items:center; gap:8px; margin-top:16px; padding-top:12px; border-top:1px solid var(--line); }
-  .intensity-label { font-size:10px; color:var(--muted); font-family:'Space Mono',monospace; }
-  .intensity-dots { display:flex; gap:4px; }
-  .dot { width:8px; height:8px; border-radius:50%; background:var(--line); }
-  .dot.on { background:var(--orange); }
-  .dot.half { background:var(--gold); }
+/* ── INTENSITY ── */
+.ibar{display:flex;align-items:center;gap:6px;padding:9px 13px}
+.ilbl{font-size:10px;font-weight:600;color:var(--sub);font-family:'DM Mono',monospace}
+.idots{display:flex;gap:3px}
+.idot{width:7px;height:7px;border-radius:50%;background:var(--bd)}
+.idot.on{background:var(--acc)}.idot.half{background:var(--gld)}
 
-  /* ── SUPP TABLE ───────────────────────────────── */
-  .supp-wrap { background:var(--card); border-radius:12px; overflow:hidden; border:1px solid var(--line); overflow-x:auto; }
-  .supp-table { width:100%; border-collapse:collapse; min-width:440px; }
-  .supp-table th { background:var(--orange); color:#000; font-family:'Space Mono',monospace; font-size:10px; letter-spacing:1px; padding:10px 12px; text-align:left; }
-  .supp-table td { padding:10px 12px; border-bottom:1px solid var(--line); font-size:12px; color:#ccc; }
-  .supp-table tr:last-child td { border-bottom:none; }
-  .badge { display:inline-block; background:rgba(61,219,130,0.15); color:var(--green); border:1px solid rgba(61,219,130,0.3); border-radius:4px; padding:2px 7px; font-size:10px; font-family:'Space Mono',monospace; }
-  .badge.warn { background:rgba(245,200,66,0.15); color:var(--gold); border-color:rgba(245,200,66,0.3); }
+/* ── NUTRITION ── */
+.nut-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px}
+.nc{background:var(--s);border:1px solid var(--bd);border-radius:var(--r);padding:10px 8px;text-align:center}
+.nv{font-size:21px;font-weight:700;color:var(--acc);line-height:1}
+.nu{font-size:10px;color:var(--acc);font-weight:600}
+.nl{font-size:10px;color:var(--sub);margin-top:3px}
 
-  /* ── NUTRITION ────────────────────────────────── */
-  .nut-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:16px; }
-  @media(max-width:400px){ .nut-grid { grid-template-columns:repeat(2,1fr); } }
-  .nut-card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:12px; text-align:center; }
-  .nut-val { font-family:'Bebas Neue',sans-serif; font-size:26px; color:var(--orange); line-height:1; }
-  .nut-unit { font-size:11px; color:var(--orange); }
-  .nut-label { font-size:11px; color:var(--muted); margin-top:3px; }
-  .tips-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-  @media(max-width:480px){ .tips-grid { grid-template-columns:1fr; } }
-  .tip-card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:13px; display:flex; gap:10px; }
-  .tip-icon { font-size:20px; flex-shrink:0; }
-  .tip-content { font-size:12px; color:#bbb; }
-  .tip-content strong { display:block; color:var(--text); margin-bottom:3px; font-size:13px; }
+/* ── TABLE ── */
+.tw{background:var(--s);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;overflow-x:auto;margin-bottom:8px}
+table{width:100%;border-collapse:collapse;min-width:320px}
+thead th{background:var(--s2);font-size:10px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.6px;padding:7px 11px;text-align:left}
+tbody td{padding:9px 11px;font-size:12.5px;border-top:1px solid var(--bd)}
+.bg{display:inline-block;border-radius:4px;padding:2px 6px;font-size:10px;font-weight:700}
+.bg-g{background:#E8FAF0;color:#0A6E2E}.bg-a{background:#FFF5E6;color:#8A5500}
 
-  /* ── SKILL CARDS ──────────────────────────────── */
-  .skill-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-  @media(max-width:560px){ .skill-grid { grid-template-columns:1fr; } }
-  .skill-card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; }
-  .skill-card.jump { border-top:3px solid var(--blue); }
-  .skill-card.ball { border-top:3px solid var(--orange); }
-  .skill-card h3 { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:1px; margin-bottom:12px; }
-  .skill-card.jump h3 { color:var(--blue); }
-  .skill-card.ball h3 { color:var(--orange); }
-  .skill-item { display:flex; gap:10px; margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid var(--line); }
-  .skill-item:last-child { border-bottom:none; margin-bottom:0; }
-  .skill-num { font-family:'Space Mono',monospace; font-size:10px; color:var(--muted); min-width:20px; margin-top:2px; }
-  .skill-text { font-size:13px; }
-  .skill-text strong { color:var(--text); display:block; margin-bottom:2px; }
-  .skill-text span { color:var(--muted); font-size:12px; }
+/* ── MONTH BANNERS ── */
+.mbanner{border-radius:var(--r);padding:11px 13px;margin-bottom:7px;display:flex;gap:9px;align-items:flex-start}
+.mbanner h4{font-size:12px;font-weight:700;margin-bottom:3px}
+.mbanner p,.mbanner li{font-size:12px;color:var(--sub2);line-height:1.5}
+.mbanner ul{padding-left:13px}
 
-  footer { text-align:center; padding:32px 16px; border-top:1px solid var(--line); color:var(--muted); font-size:11px; font-family:'Space Mono',monospace; line-height:2; }
-  footer span { color:var(--orange); }
-  @keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
-  .hero { animation:fadeUp 0.5s ease both; }
+footer{text-align:center;padding:20px 16px;border-top:1px solid var(--bd)}
+footer p{font-size:11px;color:var(--sub);line-height:2}
+footer b{color:var(--acc)}
 </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════════ -->
-<!-- HERO -->
-<!-- ═══════════════════════════════════════════════ -->
-<div class="hero">
-  <div class="hero-label">// Plan de Entrenamiento Personalizado</div>
-  <h1>BASKETBALL<br><span>ELITE</span> PLAN</h1>
-  <p class="hero-sub">Gym + Cancha + Salto Vertical + Manejo de Balón · Videos verificados para cada ejercicio.</p>
-  <div class="stats-row">
-    <div class="stat-chip"><strong>179 cm</strong> Altura</div>
-    <div class="stat-chip"><strong>73 kg</strong> Peso</div>
-    <div class="stat-chip"><strong>22.8</strong> IMC</div>
-    <div class="stat-chip"><strong>+8–10 kg</strong> Meta muscular</div>
-    <div class="stat-chip"><strong>Creatina · Proteína · Vitaminas</strong> Suplementos</div>
+<!-- MODAL -->
+<div class="overlay" id="overlay">
+ <div class="modal">
+  <div class="m-title">🏀 Basketball Plan</div>
+  <p class="m-sub">Ingresa tus datos para personalizar el plan</p>
+  <div class="fl">Nombre</div><input type="text" id="iN" placeholder="Ej: Carlos López"/>
+  <div class="r2">
+   <div><div class="fl">Altura (cm)</div><input type="number" id="iA" placeholder="179" min="140" max="230"/></div>
+   <div><div class="fl">Peso (kg)</div><input type="number" id="iP" placeholder="73" min="40" max="150"/></div>
   </div>
+  <div class="fl">Posición</div>
+  <select id="iPos"><option>Base (PG)</option><option>Escolta (SG)</option><option>Alero (SF)</option><option>Ala-Pívot (PF)</option><option>Pívot (C)</option></select>
+  <div class="fl">Experiencia en gym</div>
+  <select id="iNiv"><option>Principiante (0–1 año)</option><option selected>Intermedio (1–3 años)</option><option>Avanzado (3+ años)</option></select>
+  <button class="m-btn" onclick="applyProfile()">Generar mi plan →</button>
+ </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════ -->
-<!-- ANÁLISIS -->
-<!-- ═══════════════════════════════════════════════ -->
-<div class="section">
-  <div class="section-title"><span>01.</span> ANÁLISIS DEL ATLETA</div>
-  <div class="section-line"></div>
-  <div class="two-col">
-    <div class="analysis-box">
-      <h3>⚡ Perfil Físico</h3>
-      <p>Con <strong>179 cm y 73 kg</strong> tu constitución es <strong>mesomorfa-ectomorfa ideal</strong> para basketball. IMC 22.8. Meta: ganar <strong>+8–10 kg de músculo funcional</strong> sin sacrificar velocidad ni explosividad en cancha.</p>
-    </div>
-    <div class="analysis-box">
-      <h3>🎯 Prioridades</h3>
-      <ul>
-        <li>Salto vertical (pliometría)</li>
-        <li>Tren inferior explosivo</li>
-        <li>Core para contacto físico</li>
-        <li>Manejo de balón bajo presión</li>
-        <li>Resistencia específica de cancha</li>
-      </ul>
-    </div>
-    <div class="analysis-box">
-      <h3>💪 Estrategia Gym</h3>
-      <ul>
-        <li>Hipertrofia funcional, no estética</li>
-        <li>Énfasis piernas + glúteos + core</li>
-        <li>Pesos compuestos y potencia</li>
-        <li>Sin volumen que perjudique cancha</li>
-      </ul>
-    </div>
-    <div class="analysis-box">
-      <h3>📊 Suplementación</h3>
-      <p>✅ Creatina 5g post-entreno · ✅ Proteína 145g/día · ✅ Vitaminas con desayuno · ⚠ Agregar magnesio nocturno 300–400mg</p>
-    </div>
-  </div>
-  <div class="highlight-box">
-    <h3>🔑 Principio Clave del Plan</h3>
-    <p>El gym <em>complementa</em> la cancha, nunca la perjudica. La pliometría siempre al <strong>inicio</strong> de sesión, con el sistema nervioso fresco. El manejo de balón: <strong>10–15 min diarios</strong> sin excepción, todos los días de la semana.</p>
-  </div>
+<!-- HEADER STICKY -->
+<div class="hdr">
+ <div class="hdr-top">
+  <div class="hdr-name" id="hN">Basketball Plan</div>
+  <button class="edit-btn" onclick="openModal()">Editar</button>
+ </div>
+ <div class="hchips">
+  <div class="hchip"><b id="hA">—</b> cm · <b id="hP">—</b> kg</div>
+  <div class="hchip"><b id="hPo">—</b></div>
+  <div class="hchip hchip-acc" id="hMes">Mes 1 · Base</div>
+ </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════ -->
-<!-- PLAN SEMANAL -->
-<!-- ═══════════════════════════════════════════════ -->
-<div class="section" style="padding-top:0">
-  <div class="section-title"><span>02.</span> PLAN SEMANAL</div>
-  <div class="section-line"></div>
-  <div class="day-tabs">
-    <div class="day-tab active" onclick="showDay('lun',this)">LUN</div>
-    <div class="day-tab" onclick="showDay('mar',this)">MAR</div>
-    <div class="day-tab" onclick="showDay('mie',this)">MIÉ</div>
-    <div class="day-tab" onclick="showDay('jue',this)">JUE</div>
-    <div class="day-tab" onclick="showDay('vie',this)">VIE</div>
-    <div class="day-tab" onclick="showDay('sab',this)">SÁB</div>
-    <div class="day-tab" onclick="showDay('dom',this)">DOM</div>
-  </div>
+<div class="page">
 
-  <!-- ── LUNES ── -->
-  <div class="day-panel active" id="day-lun">
-    <div class="day-header-bar">
-      <h2>LUNES — Tren Inferior + Pliometría + Basketball</h2>
-      <p>Mayor volumen del día. Piernas explosivas en mañana, cancha en la tarde.</p>
-      <div class="day-tag tag-doble">DOBLE SESIÓN</div>
-    </div>
-    <div class="day-body">
-      <div class="block">
-        <div class="block-title">🌅 Mañana — Gym Tren Inferior (60–70 min)</div>
-        <div class="exercise-list">
-
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">🔥</div>
-              <div class="ex-info">
-                <div class="ex-name">Box Jump — Salto al Cajón</div>
-                <div class="ex-detail">PRIMERO siempre. Sistema nervioso fresco. Cajón 40–50 cm. Explosión máxima al subir, aterrizaje suave y controlado. 2 min descanso entre sets.</div>
-              </div>
-              <div class="ex-sets">4 × 6</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=_ncOMwYif7I" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Box Jump Drills para Basketball ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">🏋️</div>
-              <div class="ex-info">
-                <div class="ex-name">Sentadilla con Barra (Back Squat)</div>
-                <div class="ex-detail">Rango completo. Pecho arriba, rodillas hacia afuera. Base de toda la fuerza explosiva en basketball.</div>
-              </div>
-              <div class="ex-sets">4 × 6</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=bEv6CCg2BC8" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Back Squat — Técnica perfecta (Jeff Nippard) ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">🦵</div>
-              <div class="ex-info">
-                <div class="ex-name">Peso Muerto Rumano (RDL)</div>
-                <div class="ex-detail">Isquiotibiales y glúteos. Espalda neutra en todo momento. Clave para salto y aceleración en sprint.</div>
-              </div>
-              <div class="ex-sets">3 × 8</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=Q5vwsJFwhyg" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Romanian Deadlift — Tutorial técnica ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">⚡</div>
-              <div class="ex-info">
-                <div class="ex-name">Estocadas con Salto (Jump Lunges)</div>
-                <div class="ex-detail">Potencia unilateral explosiva. Alterna piernas. Simula cortes y drives en cancha. Aterriza suave, despega máximo.</div>
-              </div>
-              <div class="ex-sets">3 × 10/lado</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=FyxFYIV8wKU" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Alternating Jump Lunges — Tutorial ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">🎯</div>
-              <div class="ex-info">
-                <div class="ex-name">Pallof Press — Core Anti-Rotacional</div>
-                <div class="ex-detail">Core anti-rotacional. Protege columna en contacto físico. Fundamental para estabilidad defensiva.</div>
-              </div>
-              <div class="ex-sets">3 × 12 c/u</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=AH_QZLm_0-s" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Pallof Press — Demostración completa ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-
-        </div>
-      </div>
-      <div class="block">
-        <div class="block-title">🌆 Tarde — Basketball (90 min)</div>
-        <div class="exercise-list">
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">🏀</div>
-              <div class="ex-info">
-                <div class="ex-name">Calentamiento + Manejo de Balón</div>
-                <div class="ex-detail">Dribble bajo, crossover, entre piernas, reversa. Ambas manos. Nunca saltarse este bloque.</div>
-              </div>
-              <div class="ex-sets">10–15 min</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=Ot4nqFc4mMk" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Ball Handling Warm-Up Drills ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">🏃</div>
-              <div class="ex-info">
-                <div class="ex-name">Fundamentos Defensivos + Slides</div>
-                <div class="ex-detail">Defensive slides, closeouts, rotaciones. Postura baja activa. La defensa gana campeonatos.</div>
-              </div>
-              <div class="ex-sets">20 min</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=Z3ry1xJJqMY" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Defensive Slides + Fundamentos ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">🎯</div>
-              <div class="ex-info">
-                <div class="ex-name">Drive & Finish — Ambas Manos</div>
-                <div class="ex-detail">Derecho, reversa, floater. Terminar con contacto sin perder balance. Pivotar y atacar.</div>
-              </div>
-              <div class="ex-sets">30 min</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=LQtGSuJnf3Q" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Drive & Finish Drills completos ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="intensity-bar">
-        <span class="intensity-label">INTENSIDAD</span>
-        <div class="intensity-dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot"></div></div>
-        <span class="intensity-label">ALTA</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ── MARTES ── -->
-  <div class="day-panel" id="day-mar">
-    <div class="day-header-bar">
-      <h2>MARTES — Tren Superior + Manejo de Balón</h2>
-      <p>Empuje + Tirón. Sin basketball intenso para recuperar piernas.</p>
-      <div class="day-tag tag-gym">GYM + SKILLS</div>
-    </div>
-    <div class="day-body">
-      <div class="block">
-        <div class="block-title">💪 Gym — Tren Superior (60 min)</div>
-        <div class="exercise-list">
-
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">🏋️</div>
-              <div class="ex-info">
-                <div class="ex-name">Press de Banca con Barra</div>
-                <div class="ex-detail">Fuerza de empuje. Mejora defensa con cuerpo, rebotes y contacto físico. Omóplatos juntos.</div>
-              </div>
-              <div class="ex-sets">4 × 6–8</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=Z1ErMMcDR9E" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Bench Press — Técnica correcta ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">🦅</div>
-              <div class="ex-info">
-                <div class="ex-name">Dominadas con Agarre Neutro / Pull-ups</div>
-                <div class="ex-detail">Mejor ejercicio de tirón. Espalda + bíceps + core. Clave para potencia de rebote y bloqueos.</div>
-              </div>
-              <div class="ex-sets">4 × 6–8</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=eGo4IYlbE5g" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Pull-ups — Progresión desde cero ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">⬆️</div>
-              <div class="ex-info">
-                <div class="ex-name">Press Militar (Overhead Press)</div>
-                <div class="ex-detail">Fuerza sobre la cabeza. Crucial para tiros, bloqueos y pases de overhead. Core firme.</div>
-              </div>
-              <div class="ex-sets">3 × 8–10</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=2yjwXTZQDDI" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Overhead Press — Tutorial completo ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">🔙</div>
-              <div class="ex-info">
-                <div class="ex-name">Remo con Barra (Pendlay Row)</div>
-                <div class="ex-detail">Espalda media. Barra explosiva al abdomen desde el suelo. Mejora postura y control en contacto.</div>
-              </div>
-              <div class="ex-sets">3 × 8–10</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=h4nkoayPFWw" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Pendlay Row — Buff Dudes Tutorial ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">🔧</div>
-              <div class="ex-info">
-                <div class="ex-name">Face Pulls — Salud del Hombro</div>
-                <div class="ex-detail">Manguito rotador. Prevención de lesiones en jugadores de basketball. No saltarse este ejercicio.</div>
-              </div>
-              <div class="ex-sets">3 × 15</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=rep-qVOkqgk" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Face Pulls — Para salud de hombros ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-
-        </div>
-      </div>
-      <div class="block">
-        <div class="block-title">🏀 Skills — Manejo de Balón (30 min)</div>
-        <div class="exercise-list">
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">🔄</div>
-              <div class="ex-info">
-                <div class="ex-name">Dribble Stationary — Serie Completa</div>
-                <div class="ex-detail">Crossover, entre piernas, atrás, hesitation. Ambas manos. Progresión de velocidad.</div>
-              </div>
-              <div class="ex-sets">15 min</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=Ot4nqFc4mMk" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Stationary Dribble Drills — Básicos ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">🏃</div>
-              <div class="ex-info">
-                <div class="ex-name">Dribble en Movimiento — Cone Drills</div>
-                <div class="ex-detail">Slalom, figure-8, cambio de dirección. Balón bajo y controlado mientras te desplazas.</div>
-              </div>
-              <div class="ex-sets">15 min</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=Fezl2BPkYSo" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Cone Dribbling Drills ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="intensity-bar">
-        <span class="intensity-label">INTENSIDAD</span>
-        <div class="intensity-dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot"></div><div class="dot"></div></div>
-        <span class="intensity-label">MEDIA</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ── MIÉRCOLES ── -->
-  <div class="day-panel" id="day-mie">
-    <div class="day-header-bar">
-      <h2>MIÉRCOLES — Basketball Técnico + Salto</h2>
-      <p>Cancha pura. Trabajo de salto vertical específico + técnica de tiro.</p>
-      <div class="day-tag tag-basket">BASKETBALL</div>
-    </div>
-    <div class="day-body">
-      <div class="block">
-        <div class="block-title">⚡ Activación — Salto Vertical (20 min)</div>
-        <div class="exercise-list">
-
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">🦘</div>
-              <div class="ex-info">
-                <div class="ex-name">Depth Jumps (Caída + Explosión)</div>
-                <div class="ex-detail">Caer de cajón 40–50 cm, reflejo inmediato de salto. Tiempo de contacto mínimo. Simula salto en rebote.</div>
-              </div>
-              <div class="ex-sets">4 × 5</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=k4fPM6GZWWM" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Depth Jumps — Técnica y progresión ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">↕️</div>
-              <div class="ex-info">
-                <div class="ex-name">Salto Máximo al Aro (1 y 2 pasos)</div>
-                <div class="ex-detail">Máxima extensión. Medir progreso con marca en pared cada viernes. Brazo opuesto al frente.</div>
-              </div>
-              <div class="ex-sets">5 × 3</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=Tyni8wPbpWs" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Guía completa Box Jump — Técnica ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">🔁</div>
-              <div class="ex-info">
-                <div class="ex-name">Saltos en Serie (Repeat Jumps)</div>
-                <div class="ex-detail">10 saltos continuos sin pausa. Desarrolla resistencia de salto para el 4to cuarto del partido.</div>
-              </div>
-              <div class="ex-sets">3 × 10</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=fTpI4tgjci0" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Box Jump Progression — De básico a élite ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-
-        </div>
-      </div>
-      <div class="block">
-        <div class="block-title">🏀 Basketball Técnico (70 min)</div>
-        <div class="exercise-list">
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">🎯</div>
-              <div class="ex-info">
-                <div class="ex-name">Form Shooting — Mecánica Base</div>
-                <div class="ex-detail">Empezar a 1–2m del aro. Mecánica perfecta antes de abrir distancia. Muñeca de gancho al final.</div>
-              </div>
-              <div class="ex-sets">100 tiros</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=dz_VKdSBa1E" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Form Shooting — Mecánica perfecta ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">🏃</div>
-              <div class="ex-info">
-                <div class="ex-name">Catch & Shoot — 5 Posiciones</div>
-                <div class="ex-detail">Esquinas, alas y top del arco. Pies listos antes de recibir el pase. Catch limpio y rápido.</div>
-              </div>
-              <div class="ex-sets">75 tiros</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=kNmH0UVQVXE" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Catch & Shoot — 5 spots drill ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">💨</div>
-              <div class="ex-info">
-                <div class="ex-name">Drive & Finish — Ambas Manos</div>
-                <div class="ex-detail">Derecho, reversa, floater. Terminar con contacto sin perder balance.</div>
-              </div>
-              <div class="ex-sets">30 min</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=8g8EeRv6CZs" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Finishing Moves + Floater Tutorial ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="intensity-bar">
-        <span class="intensity-label">INTENSIDAD</span>
-        <div class="intensity-dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot half"></div><div class="dot"></div></div>
-        <span class="intensity-label">MEDIA–ALTA</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ── JUEVES ── -->
-  <div class="day-panel" id="day-jue">
-    <div class="day-header-bar">
-      <h2>JUEVES — Tren Inferior Fuerza + Acondicionamiento</h2>
-      <p>Segundo día de piernas — mayor carga. Suicidios al final.</p>
-      <div class="day-tag tag-gym">GYM PESADO</div>
-    </div>
-    <div class="day-body">
-      <div class="block">
-        <div class="block-title">🏋️ Gym — Potencia y Fuerza (65 min)</div>
-        <div class="exercise-list">
-
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">⚡</div>
-              <div class="ex-info">
-                <div class="ex-name">Hang Clean (Power Clean)</div>
-                <div class="ex-detail">El ejercicio más específico para basketball. Activa cadena posterior completa. Potencia total del cuerpo. Requiere técnica — aprender primero sin peso.</div>
-              </div>
-              <div class="ex-sets">4 × 4</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=8SE-BrBYx3E" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Hang Clean — Tutorial desde cero ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">🦵</div>
-              <div class="ex-info">
-                <div class="ex-name">Sentadilla Búlgara (Bulgarian Split Squat)</div>
-                <div class="ex-detail">Unilateral, más funcional. Corrige desequilibrios entre piernas. Mancuerna en cada mano.</div>
-              </div>
-              <div class="ex-sets">3 × 8/lado</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=2C-uNgKwPLE" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Bulgarian Split Squat — Tutorial ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">🏃</div>
-              <div class="ex-info">
-                <div class="ex-name">Hip Thrust con Barra — Para el Salto</div>
-                <div class="ex-detail">Activa glúteos al máximo. Directamente relacionado con tu altura de salto vertical. No saltarse.</div>
-              </div>
-              <div class="ex-sets">4 × 8–10</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=ww3_f3gFarc" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Hip Thrust para saltar más alto ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">🦿</div>
-              <div class="ex-info">
-                <div class="ex-name">Calf Raises Unilaterales en Escalón</div>
-                <div class="ex-detail">Fase final del salto vertical. Gemelos y sóleos. Rango completo de movimiento hacia abajo.</div>
-              </div>
-              <div class="ex-sets">4 × 15–20</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=gwLzBJYoWlI" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Calf Raises para salto vertical ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">🔄</div>
-              <div class="ex-info">
-                <div class="ex-name">Dead Bug — Core Profundo</div>
-                <div class="ex-detail">Estabilidad lumbar profunda. Previene lesiones en cambios de dirección. Controla la respiración.</div>
-              </div>
-              <div class="ex-sets">3 × 10</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=4XLEnwUr1d8" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Dead Bug Exercise — Tutorial ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-
-        </div>
-      </div>
-      <div class="block">
-        <div class="block-title">🏃 Acondicionamiento — Suicidios (20 min)</div>
-        <div class="exercise-list">
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">💨</div>
-              <div class="ex-info">
-                <div class="ex-name">Sprints — Suicidios en Cancha</div>
-                <div class="ex-detail">Full court, half court, línea de tiro libre. 6 rondas, 90 seg descanso. Simula ritmo real de partido.</div>
-              </div>
-              <div class="ex-sets">6 rondas</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=RopLge6K0ps" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Basketball Suicides — Cómo hacerlos ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="intensity-bar">
-        <span class="intensity-label">INTENSIDAD</span>
-        <div class="intensity-dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div></div>
-        <span class="intensity-label">MUY ALTA</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ── VIERNES ── -->
-  <div class="day-panel" id="day-vie">
-    <div class="day-header-bar">
-      <h2>VIERNES — Basketball Competitivo + Gym Accesorio</h2>
-      <p>Día de juego real. Gym liviano post-cancha.</p>
-      <div class="day-tag tag-doble">DOBLE SESIÓN</div>
-    </div>
-    <div class="day-body">
-      <div class="block">
-        <div class="block-title">🏀 Basketball — Sesión Completa (90–120 min)</div>
-        <div class="exercise-list">
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">🏀</div>
-              <div class="ex-info">
-                <div class="ex-name">Calentamiento + Manejo Diario</div>
-                <div class="ex-detail">Rutina de manejo diaria. Ambas manos, velocidad progresiva. Nunca saltarse.</div>
-              </div>
-              <div class="ex-sets">15 min</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=Ot4nqFc4mMk" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Ball Handling Warm-Up ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">🎮</div>
-              <div class="ex-info">
-                <div class="ex-name">Juego 5v5 o 3v3 Situacional</div>
-                <div class="ex-detail">Aplicar todo lo trabajado. Comunicación, sets ofensivos y rotaciones defensivas reales.</div>
-              </div>
-              <div class="ex-sets">60–90 min</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=pu40g_ZxnL0" target="_blank">
-              <div class="yt-icon"></div><span class="vt">IQ Basketball — Lectura de juego ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">🎯</div>
-              <div class="ex-info">
-                <div class="ex-name">Free Throws Post-Fatiga</div>
-                <div class="ex-detail">50 tiros libres estando cansado. Simula presión de partido en últimos 2 minutos.</div>
-              </div>
-              <div class="ex-sets">50 tiros</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=TUcF-I3J-HY" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Free Throw Routine Profesional ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="block">
-        <div class="block-title">💪 Gym Accesorio Opcional (30 min)</div>
-        <div class="exercise-list">
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">🦾</div>
-              <div class="ex-info">
-                <div class="ex-name">Farmer Carry + Agarre</div>
-                <div class="ex-detail">Agarre fuerte = mejor control de balón bajo presión defensiva. Mancuernas pesadas, 30m caminando.</div>
-              </div>
-              <div class="ex-sets">3 × 30m</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=Fkzk_RqlYig" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Farmer Carry — Beneficios y técnica ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="intensity-bar">
-        <span class="intensity-label">INTENSIDAD</span>
-        <div class="intensity-dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot"></div></div>
-        <span class="intensity-label">ALTA</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ── SÁBADO ── -->
-  <div class="day-panel" id="day-sab">
-    <div class="day-header-bar">
-      <h2>SÁBADO — Recuperación Activa + Skills</h2>
-      <p>Movilidad, elongación y trabajo técnico de bajo impacto.</p>
-      <div class="day-tag tag-rest">ACTIVO</div>
-    </div>
-    <div class="day-body">
-      <div class="block">
-        <div class="block-title">🧘 Recuperación y Movilidad (45 min)</div>
-        <div class="exercise-list">
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">🧘</div>
-              <div class="ex-info">
-                <div class="ex-name">Foam Rolling — Piernas Completas</div>
-                <div class="ex-detail">IT band, cuádriceps, isquiotibiales, gemelos. 60–90 segundos por grupo.</div>
-              </div>
-              <div class="ex-sets">15 min</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=q2VuMkiJxYk" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Foam Rolling Legs — Rutina completa ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">🦵</div>
-              <div class="ex-info">
-                <div class="ex-name">Elongación Estática — Cadena Posterior</div>
-                <div class="ex-detail">Hip flexors, glúteos, isquiotibiales. Aumenta rango de movimiento en salto y cuts.</div>
-              </div>
-              <div class="ex-sets">20 min</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=sTxC3J3gQEU" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Stretching para atletas de basketball ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="block">
-        <div class="block-title">🏀 Skills Suaves (40 min)</div>
-        <div class="exercise-list">
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">🎯</div>
-              <div class="ex-info">
-                <div class="ex-name">Shooting Session — Sin Presión de Tiempo</div>
-                <div class="ex-detail">Mecánica, arco alto, seguimiento. 150 tiros a tu ritmo. Calidad sobre cantidad. Disfruta el proceso.</div>
-              </div>
-              <div class="ex-sets">150 tiros</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=eGHpVVRGGpQ" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Shooting Workout — 150 tiros ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">🏀</div>
-              <div class="ex-info">
-                <div class="ex-name">Dribble de Rodillas / Sentado</div>
-                <div class="ex-detail">Mejora el tacto y control fino sin impacto físico. Ideal para el día de recuperación.</div>
-              </div>
-              <div class="ex-sets">15 min</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=yqWgwwVcA_E" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Seated Dribble Drills — Control fino ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="intensity-bar">
-        <span class="intensity-label">INTENSIDAD</span>
-        <div class="intensity-dots"><div class="dot on"></div><div class="dot half"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
-        <span class="intensity-label">BAJA</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ── DOMINGO ── -->
-  <div class="day-panel" id="day-dom">
-    <div class="day-header-bar">
-      <h2>DOMINGO — Descanso Total</h2>
-      <p>El músculo crece en el reposo. El descanso ES parte del entrenamiento.</p>
-      <div class="day-tag tag-rest">DESCANSO</div>
-    </div>
-    <div class="day-body">
-      <div class="block">
-        <div class="block-title">🛌 Protocolo de Recuperación</div>
-        <div class="exercise-list">
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">😴</div>
-              <div class="ex-info">
-                <div class="ex-name">Sueño 8–9 horas</div>
-                <div class="ex-detail">El 70% de la hormona de crecimiento se libera durante el sueño profundo. Magnesio antes de dormir. No negociable.</div>
-              </div>
-              <div class="ex-sets">Prioridad #1</div>
-            </div>
-          </div>
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">💧</div>
-              <div class="ex-info">
-                <div class="ex-name">Hidratación 3–4 litros</div>
-                <div class="ex-detail">La deshidratación reduce la fuerza hasta un 10% y el tiempo de reacción en cancha.</div>
-              </div>
-              <div class="ex-sets">Todo el día</div>
-            </div>
-          </div>
-          <div class="exercise-item">
-            <div class="ex-top">
-              <div class="ex-icon">🎬</div>
-              <div class="ex-info">
-                <div class="ex-name">Film Study — Ver Basketball</div>
-                <div class="ex-detail">Off-ball movement, lectura de defensa, spacing. El basketball mental también se entrena.</div>
-              </div>
-              <div class="ex-sets">Opcional</div>
-            </div>
-            <a class="video-btn" href="https://www.youtube.com/watch?v=TkJfN-D5eI8" target="_blank">
-              <div class="yt-icon"></div><span class="vt">Cómo estudiar basketball (film study) ✅</span><span class="varr">↗</span>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="intensity-bar">
-        <span class="intensity-label">INTENSIDAD</span>
-        <div class="intensity-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
-        <span class="intensity-label">CERO — DESCANSO</span>
-      </div>
-    </div>
-  </div>
+<!-- ANÁLISIS — colapsable, se lee una vez -->
+<div class="abox">
+ <div class="atog" onclick="toggleAnal()">
+  <h3>📋 Análisis Deportivo</h3>
+  <span class="atog-lbl" id="atolbl">Ver análisis ›</span>
+ </div>
+ <div class="abody" id="abody">
+  <div style="height:5px"></div>
+  <div class="banner b-green"><div class="bico">✅</div><div class="bbody"><h4>Lo que está bien</h4><ul><li>2 días de piernas/semana: correcto para fuerza explosiva</li><li>Deload cada 4 semanas: periodización científica (Bompa)</li><li>Pliometría al inicio: prioridad neuromuscular</li><li>Manejo diario: práctica deliberada real</li><li>Creatina + proteína: mayor evidencia en deporte de equipo</li></ul></div></div>
+  <div class="banner b-amber"><div class="bico">⚠️</div><div class="bbody"><h4>Correcciones aplicadas al plan</h4><ul><li>Lunes ya no es doble sesión pesada — gym pesado al martes con cuerpo fresco</li><li>Hang Clean en Mes 2 el martes AM (sistema nervioso al 100%)</li><li>Propiocepción desde semana 1 para proteger tobillo y rodilla</li><li>Checks de progreso: salto, % free throws, cargas gym</li></ul></div></div>
+  <div class="banner b-red"><div class="bico">🚨</div><div class="bbody"><h4>Señales de sobreentrenamiento</h4><ul><li>Rendimiento en cancha cae sin razón</li><li>Sueño perturbado &gt;3 noches seguidas</li><li>Motivación muy baja o dolor articular</li><li>2 señales juntas → deload inmediato</li></ul></div></div>
+  <div class="key-card"><h3>🔑 Prioridad de Alto Rendimiento</h3><p><b>1) Recuperación · 2) Basketball · 3) Pliometría · 4) Gym</b>. Si algo cede, que ceda el gym. Nunca la cancha ni el sueño.</p></div>
+  <button class="close-anal" onclick="closeAnal()">Cerrar análisis ›</button>
+ </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════ -->
-<!-- SALTO + MANEJO -->
-<!-- ═══════════════════════════════════════════════ -->
-<div class="section" style="padding-top:0">
-  <div class="section-title"><span>03.</span> SALTO VERTICAL + MANEJO</div>
-  <div class="section-line"></div>
-  <div class="skill-grid">
-    <div class="skill-card jump">
-      <h3>⬆️ SALTO VERTICAL</h3>
-      <div class="skill-item"><div class="skill-num">01</div><div class="skill-text"><strong>Pliometría 2x/semana</strong><span>Box Jumps, Depth Jumps. Siempre al inicio. 72h entre sesiones plio.</span></div></div>
-      <div class="skill-item"><div class="skill-num">02</div><div class="skill-text"><strong>Fuerza de Base</strong><span>Squat + Hip Thrust + Calf Raises. Meta: squat 1.5x tu peso corporal.</span></div></div>
-      <div class="skill-item"><div class="skill-num">03</div><div class="skill-text"><strong>Técnica de Brazo</strong><span>Swing de brazos correcto: +5–8 cm inmediatos. Extensión completa de tobillos.</span></div></div>
-      <div class="skill-item"><div class="skill-num">04</div><div class="skill-text"><strong>Medir cada semana</strong><span>Marca en pared cada viernes. Esperar 8–12 semanas para ver ganancias reales.</span></div></div>
-    </div>
-    <div class="skill-card ball">
-      <h3>🏀 MANEJO</h3>
-      <div class="skill-item"><div class="skill-num">01</div><div class="skill-text"><strong>10–15 min Diarios</strong><span>La consistencia supera la intensidad. Sin excepción, todos los días.</span></div></div>
-      <div class="skill-item"><div class="skill-num">02</div><div class="skill-text"><strong>Mano Débil Primero</strong><span>El cerebro aprende mejor cuando está fresco. Siempre iniciar con la no-dominante.</span></div></div>
-      <div class="skill-item"><div class="skill-num">03</div><div class="skill-text"><strong>Lento → Rápido</strong><span>Primero limpio y lento. El error a baja velocidad = error en partido.</span></div></div>
-      <div class="skill-item"><div class="skill-num">04</div><div class="skill-text"><strong>Movimientos Compuestos</strong><span>Crossover → entre piernas → reversa → hesitation. Sin pausas.</span></div></div>
-    </div>
-  </div>
+<!-- SUPLEMENTACIÓN -->
+<div class="sec-hd"><div class="sec-lbl">Suplementación</div></div>
+<div class="tw">
+ <table>
+  <thead><tr><th>Suplemento</th><th>Dosis</th><th>Momento</th><th></th></tr></thead>
+  <tbody>
+   <tr><td><b>Creatina</b></td><td>5 g</td><td>Post-entreno</td><td><span class="bg bg-g">✓</span></td></tr>
+   <tr><td><b>Proteína Whey</b></td><td>30–40 g</td><td>30 min post-entreno</td><td><span class="bg bg-g">✓</span></td></tr>
+   <tr><td><b>Vitaminas</b></td><td>Etiqueta</td><td>Con desayuno</td><td><span class="bg bg-g">✓</span></td></tr>
+   <tr><td><b>Magnesio Glicinato</b></td><td>300–400 mg</td><td>Antes de dormir</td><td><span class="bg bg-a">⚠</span></td></tr>
+   <tr><td><b>Omega-3</b></td><td>2–3 g</td><td>Con comida</td><td><span class="bg bg-a">⚠</span></td></tr>
+  </tbody>
+ </table>
 </div>
 
-<!-- ═══════════════════════════════════════════════ -->
+<!-- PLAN -->
+<div class="sec-hd"><div class="sec-lbl">Plan</div><div class="sec-title">4 Meses de Progresión</div></div>
+<div class="mbar">
+ <div class="mtab active" onclick="showMonth(1,this)">Mes 1 · Base</div>
+ <div class="mtab" onclick="showMonth(2,this)">Mes 2 · Desarrollo</div>
+ <div class="mtab" onclick="showMonth(3,this)">Mes 3 · Intensidad</div>
+ <div class="mtab" onclick="showMonth(4,this)">Mes 4 · Peak</div>
+</div>
+
+<!-- ═══ MES 1 ═══ -->
+<div class="mpanel active" id="mp1">
+ <div class="mhdr"><h2>Mes 1 — Base</h2><p>Sem 1–4 · Aprender técnica · RPE 6–7 · Construir hábitos diarios</p><span class="pbadge pb1">FASE BASE</span></div>
+ <div class="dbar">
+  <div class="dtab active" onclick="showDay('1lun',this)">Lun</div>
+  <div class="dtab" onclick="showDay('1mar',this)">Mar</div>
+  <div class="dtab" onclick="showDay('1mie',this)">Mié</div>
+  <div class="dtab" onclick="showDay('1jue',this)">Jue</div>
+  <div class="dtab" onclick="showDay('1vie',this)">Vie</div>
+  <div class="dtab" onclick="showDay('1sab',this)">Sáb</div>
+  <div class="dtab" onclick="showDay('1dom',this)">Dom</div>
+ </div>
+
+ <!-- LUN -->
+ <div class="dpanel active" id="d-1lun">
+  <div class="day-card">
+   <div class="day-top"><h2>Lunes</h2><p>Basketball + Manejo · Gym superior opcional PM</p><div class="day-tags"><span class="tag tb">Basketball</span><span class="tag ts">Manejo</span><span class="tag tg">Gym opcional</span></div></div>
+   <div class="day-prog"><div class="prog-bar"><div class="prog-fill" id="pg-1lun" style="width:0%"></div></div><div class="prog-lbl" id="pl-1lun">0%</div></div>
+   <div class="reset-row"><button class="reset-btn" onclick="resetDay('1lun')">Limpiar checks</button></div>
+   <div class="sb open" id="sb-1lun-a"><div class="sh" onclick="tb('sb-1lun-a')"><div class="sico is">🎯</div><div class="sm"><div class="sn">Manejo de Balón — Daily</div><div class="st">15 min · Todos los días sin excepción</div></div><div class="sch">›</div></div>
+    <div class="sbd">
+     <div class="ex" id="e-1lun-a-1"><div class="ex-row"><div class="ex-chk" onclick="chk('1lun-a-1')"></div><div class="ex-main"><div class="ex-name">Crossover Básico — Ambas manos</div><div class="ex-note">Mano débil primero. Lento y limpio. Ojos al frente siempre.</div></div><div class="ex-sets">5 min</div></div><a class="vlink" href="https://www.youtube.com/watch?v=oADaM2L1YLc" target="_blank"><div class="ytpill"></div><span class="vt">5 Min Daily Dribble — ILB Elite</span><span class="varr">↗</span></a></div>
+     <div class="ex" id="e-1lun-a-2"><div class="ex-row"><div class="ex-chk" onclick="chk('1lun-a-2')"></div><div class="ex-main"><div class="ex-name">Entre Piernas — Técnica base</div><div class="ex-note">Paso correcto al frente. Sin forzar velocidad el primer mes.</div></div><div class="ex-sets">5 min</div></div><a class="vlink" href="https://www.youtube.com/watch?v=juEjjdGdVU4" target="_blank"><div class="ytpill"></div><span class="vt">Between the Legs — Tutorial 2024</span><span class="varr">↗</span></a></div>
+     <div class="ex" id="e-1lun-a-3"><div class="ex-row"><div class="ex-chk" onclick="chk('1lun-a-3')"></div><div class="ex-main"><div class="ex-name">Reversa (Behind the Back)</div><div class="ex-note">Errores comunes y correcciones. Dominar crossover primero.</div></div><div class="ex-sets">5 min</div></div><a class="vlink" href="https://www.youtube.com/watch?v=_uX5ZPN3Sos" target="_blank"><div class="ytpill"></div><span class="vt">Behind the Back — Fixes 2024</span><span class="varr">↗</span></a></div>
+    </div>
+   </div>
+   <div class="sb open" id="sb-1lun-b"><div class="sh" onclick="tb('sb-1lun-b')"><div class="sico ib">🏀</div><div class="sm"><div class="sn">Basketball — Fundamentos</div><div class="st">75 min · Técnica sobre intensidad</div></div><div class="sch">›</div></div>
+    <div class="sbd">
+     <div class="ex" id="e-1lun-b-1"><div class="ex-row"><div class="ex-chk" onclick="chk('1lun-b-1')"></div><div class="ex-main"><div class="ex-name">Form Shooting</div><div class="ex-note"><span class="ex-diff d-new">Mes 1: desde 1–2 m del aro</span> · 100 tiros · Muñeca de gancho al final.</div></div><div class="ex-sets">100 tiros</div></div><a class="vlink" href="https://www.youtube.com/watch?v=UcnB9e5O5NY" target="_blank"><div class="ytpill"></div><span class="vt">Perfect Shooting Form — ILB Elite 2024</span><span class="varr">↗</span></a></div>
+     <div class="ex" id="e-1lun-b-2"><div class="ex-row"><div class="ex-chk" onclick="chk('1lun-b-2')"></div><div class="ex-main"><div class="ex-name">Defensive Slides + Closeouts</div><div class="ex-note">Pies nunca juntos. Postura baja activa todo el tiempo.</div></div><div class="ex-sets">20 min</div></div><a class="vlink" href="https://www.youtube.com/watch?v=Z3ry1xJJqMY" target="_blank"><div class="ytpill"></div><span class="vt">Defensive Slides + Fundamentos</span><span class="varr">↗</span></a></div>
+     <div class="ex" id="e-1lun-b-3"><div class="ex-row"><div class="ex-chk" onclick="chk('1lun-b-3')"></div><div class="ex-main"><div class="ex-name">Drive & Finish — Mano dominante</div><div class="ex-note">Mes 1: dominar una mano antes de avanzar a la débil.</div></div><div class="ex-sets">20 min</div></div><a class="vlink" href="https://www.youtube.com/watch?v=LQtGSuJnf3Q" target="_blank"><div class="ytpill"></div><span class="vt">Drive & Finish Drills</span><span class="varr">↗</span></a></div>
+    </div>
+   </div>
+   <div class="sb" id="sb-1lun-c"><div class="sh" onclick="tb('sb-1lun-c')"><div class="sico ig">🏋️</div><div class="sm"><div class="sn">Gym Tren Superior — Opcional PM</div><div class="st">Solo si hay energía · 40 min · RPE 6</div></div><div class="sch">›</div></div>
+    <div class="sbd">
+     <div class="ex" id="e-1lun-c-1"><div class="ex-row"><div class="ex-chk" onclick="chk('1lun-c-1')"></div><div class="ex-main"><div class="ex-name">Press Banca</div><div class="ex-note"><span class="ex-diff d-new">Mes 1: aprender forma</span> · 3 seg bajando, 1 arriba.</div></div><div class="ex-sets">3 × 8</div></div><a class="vlink" href="https://www.youtube.com/watch?v=Z1ErMMcDR9E" target="_blank"><div class="ytpill"></div><span class="vt">Bench Press — Técnica correcta</span><span class="varr">↗</span></a></div>
+     <div class="ex" id="e-1lun-c-2"><div class="ex-row"><div class="ex-chk" onclick="chk('1lun-c-2')"></div><div class="ex-main"><div class="ex-name">Dominadas / Jalón al Pecho</div><div class="ex-note">Sin dominadas aún: jalón con agarre ancho.</div></div><div class="ex-sets">3 × 8</div></div><a class="vlink" href="https://www.youtube.com/watch?v=eGo4IYlbE5g" target="_blank"><div class="ytpill"></div><span class="vt">Pull-ups — Progresión desde cero</span><span class="varr">↗</span></a></div>
+     <div class="ex" id="e-1lun-c-3"><div class="ex-row"><div class="ex-chk" onclick="chk('1lun-c-3')"></div><div class="ex-main"><div class="ex-name">Face Pulls</div><div class="ex-note">Nunca saltarlo. Previene 80% de lesiones de hombro.</div></div><div class="ex-sets">3 × 15</div></div><a class="vlink" href="https://www.youtube.com/watch?v=rep-qVOkqgk" target="_blank"><div class="ytpill"></div><span class="vt">Face Pulls — Hombros sanos</span><span class="varr">↗</span></a></div>
+    </div>
+   </div>
+   <div class="ibar"><span class="ilbl">INTENSIDAD</span><div class="idots"><div class="idot on"></div><div class="idot on"></div><div class="idot on"></div><div class="idot"></div><div class="idot"></div></div><span class="ilbl">Media</span></div>
+  </div>
+ </div>
+
+ <!-- MAR -->
+ <div class="dpanel" id="d-1mar">
+  <div class="day-card">
+   <div class="day-top"><h2>Martes</h2><p>Pliometría PRIMERO + Gym Piernas · Manejo</p><div class="day-tags"><span class="tag tp">Pliometría AM</span><span class="tag tg">Gym Piernas</span><span class="tag ts">Manejo PM</span></div></div>
+   <div class="day-prog"><div class="prog-bar"><div class="prog-fill" id="pg-1mar" style="width:0%"></div></div><div class="prog-lbl" id="pl-1mar">0%</div></div>
+   <div class="reset-row"><button class="reset-btn" onclick="resetDay('1mar')">Limpiar checks</button></div>
+   <div class="sb open" id="sb-1mar-a"><div class="sh" onclick="tb('sb-1mar-a')"><div class="sico ip">🦘</div><div class="sm"><div class="sn">Pliometría — Salto Vertical</div><div class="st">PRIMERO · Sistema nervioso fresco · 20 min</div></div><div class="sch">›</div></div>
+    <div class="sbd">
+     <div class="ex" id="e-1mar-a-1"><div class="ex-row"><div class="ex-chk" onclick="chk('1mar-a-1')"></div><div class="ex-main"><div class="ex-name">Box Jump — Cajón 30–40 cm</div><div class="ex-note"><span class="ex-diff d-new">Mes 1: altura baja, técnica perfecta</span><br>Máxima explosión. Aterrizaje suave. 2 min descanso.</div></div><div class="ex-sets">4 × 5</div></div><a class="vlink" href="https://www.youtube.com/watch?v=_ncOMwYif7I" target="_blank"><div class="ytpill"></div><span class="vt">Box Jump Drills para Basketball</span><span class="varr">↗</span></a></div>
+     <div class="ex" id="e-1mar-a-2"><div class="ex-row"><div class="ex-chk" onclick="chk('1mar-a-2')"></div><div class="ex-main"><div class="ex-name">Jump Lunges — Estocadas con salto</div><div class="ex-note">Alterna piernas en el aire. Aterriza suave. Simula cortes en cancha.</div></div><div class="ex-sets">3 × 8/lado</div></div><a class="vlink" href="https://www.youtube.com/watch?v=FyxFYIV8wKU" target="_blank"><div class="ytpill"></div><span class="vt">Jump Lunges — Alternating Tutorial</span><span class="varr">↗</span></a></div>
+     <div class="ex" id="e-1mar-a-3"><div class="ex-row"><div class="ex-chk" onclick="chk('1mar-a-3')"></div><div class="ex-main"><div class="ex-name">Propiocepción — 1 pierna</div><div class="ex-note"><span class="ex-diff d-new">Prevención tobillo y rodilla</span><br>30 seg c/pierna. Ojos abiertos → luego cerrados.</div></div><div class="ex-sets">3 × 30 seg</div></div><a class="vlink" href="https://www.youtube.com/watch?v=flm5f7bn6SY" target="_blank"><div class="ytpill"></div><span class="vt">9 Plyometrics Basketball — D1 Coach</span><span class="varr">↗</span></a></div>
+    </div>
+   </div>
+   <div class="sb open" id="sb-1mar-b"><div class="sh" onclick="tb('sb-1mar-b')"><div class="sico ig">🏋️</div><div class="sm"><div class="sn">Gym — Tren Inferior</div><div class="st">Después de plyo · 45 min · RPE 6–7</div></div><div class="sch">›</div></div>
+    <div class="sbd">
+     <div class="ex" id="e-1mar-b-1"><div class="ex-row"><div class="ex-chk" onclick="chk('1mar-b-1')"></div><div class="ex-main"><div class="ex-name">Sentadilla con Barra (Back Squat)</div><div class="ex-note"><span class="ex-diff d-new">Mes 1: solo barra o peso ligero</span><br>Rango completo. Pecho arriba.</div></div><div class="ex-sets">4 × 6</div></div><a class="vlink" href="https://www.youtube.com/watch?v=bEv6CCg2BC8" target="_blank"><div class="ytpill"></div><span class="vt">Back Squat — Jeff Nippard</span><span class="varr">↗</span></a></div>
+     <div class="ex" id="e-1mar-b-2"><div class="ex-row"><div class="ex-chk" onclick="chk('1mar-b-2')"></div><div class="ex-main"><div class="ex-name">Peso Muerto Rumano (RDL)</div><div class="ex-note">Isquiotibiales y glúteos. Espalda neutra siempre.</div></div><div class="ex-sets">3 × 8</div></div><a class="vlink" href="https://www.youtube.com/watch?v=Q5vwsJFwhyg" target="_blank"><div class="ytpill"></div><span class="vt">Romanian Deadlift — Tutorial</span><span class="varr">↗</span></a></div>
+     <div class="ex" id="e-1mar-b-3"><div class="ex-row"><div class="ex-chk" onclick="chk('1mar-b-3')"></div><div class="ex-main"><div class="ex-name">Hip Thrust con Barra</div><div class="ex-note">Glúteos al máximo. Directo al salto vertical.</div></div><div class="ex-sets">3 × 10</div></div><a class="vlink" href="https://www.youtube.com/watch?v=ww3_f3gFarc" target="_blank"><div class="ytpill"></div><span class="vt">Hip Thrust — Para saltar más alto</span><span class="varr">↗</span></a></div>
+     <div class="ex" id="e-1mar-b-4"><div class="ex-row"><div class="ex-chk" onclick="chk('1mar-b-4')"></div><div class="ex-main"><div class="ex-name">Calf Raises Unilaterales</div><div class="ex-note">Fase final del salto. Rango completo hacia abajo.</div></div><div class="ex-sets">3 × 15</div></div><a class="vlink" href="https://www.youtube.com/watch?v=gwLzBJYoWlI" target="_blank"><div class="ytpill"></div><span class="vt">Calf Raises para salto vertical</span><span class="varr">↗</span></a></div>
+    </div>
+   </div>
+   <div class="sb open" id="sb-1mar-c"><div class="sh" onclick="tb('sb-1mar-c')"><div class="sico is">🎯</div><div class="sm"><div class="sn">Manejo de Balón — Daily</div><div class="st">PM · 15 min</div></div><div class="sch">›</div></div>
+    <div class="sbd">
+     <div class="ex" id="e-1mar-c-1"><div class="ex-row"><div class="ex-chk" onclick="chk('1mar-c-1')"></div><div class="ex-main"><div class="ex-name">Rutina Diaria Completa</div><div class="ex-note">Crossover → entre piernas → reversa. Mano débil primero.</div></div><div class="ex-sets">15 min</div></div><a class="vlink" href="https://www.youtube.com/watch?v=CLoWxOvlHkk" target="_blank"><div class="ytpill"></div><span class="vt">5 Min Ball Handling — ILB Elite 2024</span><span class="varr">↗</span></a></div>
+    </div>
+   </div>
+   <div class="ibar"><span class="ilbl">INTENSIDAD</span><div class="idots"><div class="idot on"></div><div class="idot on"></div><div class="idot on"></div><div class="idot on"></div><div class="idot"></div></div><span class="ilbl">Alta</span></div>
+  </div>
+ </div>
+
+ <!-- MIÉ -->
+ <div class="dpanel" id="d-1mie">
+  <div class="day-card">
+   <div class="day-top"><h2>Miércoles</h2><p>Gym Tren Superior · Manejo</p><div class="day-tags"><span class="tag tg">Gym AM</span><span class="tag ts">Manejo PM</span></div></div>
+   <div class="day-prog"><div class="prog-bar"><div class="prog-fill" id="pg-1mie" style="width:0%"></div></div><div class="prog-lbl" id="pl-1mie">0%</div></div>
+   <div class="reset-row"><button class="reset-btn" onclick="resetDay('1mie')">Limpiar checks</button></div>
+   <div class="sb open" id="sb-1mie-a"><div class="sh" onclick="tb('sb-1mie-a')"><div class="sico ig">🏋️</div><div class="sm"><div class="sn">Gym — Tren Superior</div><div class="st">55 min · Empuje + Tirón · RPE 6–7</div></div><div class="sch">›</div></div>
+    <div class="sbd">
+     <div class="ex" id="e-1mie-a-1"><div class="ex-row"><div class="ex-chk" onclick="chk('1mie-a-1')"></div><div class="ex-main"><div class="ex-name">Press Militar (Overhead Press)</div><div class="ex-note">Fuerza sobre la cabeza. Crucial para tiros y bloqueos.</div></div><div class="ex-sets">4 × 8</div></div><a class="vlink" href="https://www.youtube.com/watch?v=2yjwXTZQDDI" target="_blank"><div class="ytpill"></div><span class="vt">Overhead Press — Tutorial</span><span class="varr">↗</span></a></div>
+     <div class="ex" id="e-1mie-a-2"><div class="ex-row"><div class="ex-chk" onclick="chk('1mie-a-2')"></div><div class="ex-main"><div class="ex-name">Pendlay Row</div><div class="ex-note">Espalda media. Barra al abdomen desde el suelo. Control total.</div></div><div class="ex-sets">4 × 8</div></div><a class="vlink" href="https://www.youtube.com/watch?v=h4nkoayPFWw" target="_blank"><div class="ytpill"></div><span class="vt">Pendlay Row — Buff Dudes</span><span class="varr">↗</span></a></div>
+     <div class="ex" id="e-1mie-a-3"><div class="ex-row"><div class="ex-chk" onclick="chk('1mie-a-3')"></div><div class="ex-main"><div class="ex-name">Dead Bug — Core</div><div class="ex-note">Estabilidad lumbar profunda. Previene lesiones en cambios de dirección.</div></div><div class="ex-sets">3 × 10</div></div><a class="vlink" href="https://www.youtube.com/watch?v=4XLEnwUr1d8" target="_blank"><div class="ytpill"></div><span class="vt">Dead Bug — Tutorial</span><span class="varr">↗</span></a></div>
+     <div class="ex" id="e-1mie-a-4"><div class="ex-row"><div class="ex-chk" onclick="chk('1mie-a-4')"></div><div class="ex-main"><div class="ex-name">Face Pulls</div><div class="ex-note">Manguito rotador. Nunca saltarlo.</div></div><div class="ex-sets">3 × 15</div></div><a class="vlink" href="https://www.youtube.com/watch?v=rep-qVOkqgk" target="_blank"><div class="ytpill"></div><span class="vt">Face Pulls — Hombros sanos</span><span class="varr">↗</span></a></div>
+    </div>
+   </div>
+   <div class="sb open" id="sb-1mie-b"><div class="sh" onclick="tb('sb-1mie-b')"><div class="sico is">🎯</div><div class="sm"><div class="sn">Manejo de Balón — Daily</div><div class="st">15 min</div></div><div class="sch">›</div></div>
+    <div class="sbd">
+     <div class="ex" id="e-1mie-b-1"><div class="ex-row"><div class="ex-chk" onclick="chk('1mie-b-1')"></div><div class="ex-main"><div class="ex-name">5 Drills Esenciales</div><div class="ex-note">Énfasis en mano débil hoy. Los 5 más importantes.</div></div><div class="ex-sets">15 min</div></div><a class="vlink" href="https://www.youtube.com/watch?v=a6rPVGkGpds" target="_blank"><div class="ytpill"></div><span class="vt">5 Dribbling Drills Every Player Should Do</span><span class="varr">↗</span></a></div>
+    </div>
+   </div>
+   <div class="ibar"><span class="ilbl">INTENSIDAD</span><div class="idots"><div class="idot on"></div><div class="idot on"></div><div class="idot on"></div><div class="idot"></div><div class="idot"></div></div><span class="ilbl">Media</span></div>
+  </div>
+ </div>
+
+ <!-- JUE -->
+ <div class="dpanel" id="d-1jue">
+  <div class="day-card">
+   <div class="day-top"><h2>Jueves</h2><p>Basketball Técnico · Tiros · Manejo</p><div class="day-tags"><span class="tag tb">Basketball</span><span class="tag ts">Manejo</span></div></div>
+   <div class="day-prog"><div class="prog-bar"><div class="prog-fill" id="pg-1jue" style="width:0%"></div></div><div class="prog-lbl" id="pl-1jue">0%</div></div>
+   <div class="reset-row"><button class="reset-btn" onclick="resetDay('1jue')">Limpiar checks</button></div>
+   <div class="sb open" id="sb-1jue-a"><div class="sh" onclick="tb('sb-1jue-a')"><div class="sico ib">🏀</div><div class="sm"><div class="sn">Basketball Técnico</div><div class="st">90 min · Tiro + Finishing</div></div><div class="sch">›</div></div>
+    <div class="sbd">
+     <div class="ex" id="e-1jue-a-1"><div class="ex-row"><div class="ex-chk" onclick="chk('1jue-a-1')"></div><div class="ex-main"><div class="ex-name">Form Shooting</div><div class="ex-note">100 tiros. Mecánica antes que distancia. Registrar % anotados.</div></div><div class="ex-sets">100 tiros</div></div><a class="vlink" href="https://www.youtube.com/watch?v=wxpdmz2UoOA" target="_blank"><div class="ytpill"></div><span class="vt">Shooting Form Drills 2024</span><span class="varr">↗</span></a></div>
+     <div class="ex" id="e-1jue-a-2"><div class="ex-row"><div class="ex-chk" onclick="chk('1jue-a-2')"></div><div class="ex-main"><div class="ex-name">Drive & Finish — Mano débil</div><div class="ex-note">Jueves siempre mano débil. La incomodidad constante diferencia.</div></div><div class="ex-sets">25 min</div></div><a class="vlink" href="https://www.youtube.com/watch?v=LQtGSuJnf3Q" target="_blank"><div class="ytpill"></div><span class="vt">Drive & Finish Drills</span><span class="varr">↗</span></a></div>
+     <div class="ex" id="e-1jue-a-3"><div class="ex-row"><div class="ex-chk" onclick="chk('1jue-a-3')"></div><div class="ex-main"><div class="ex-name">Free Throws — 50 tiros</div><div class="ex-note">Rutina fija. Medir % anotados. Meta mes 1: 60%+.</div></div><div class="ex-sets">50 tiros</div></div><a class="vlink" href="https://www.youtube.com/watch?v=TUcF-I3J-HY" target="_blank"><div class="ytpill"></div><span class="vt">Free Throw Routine Profesional</span><span class="varr">↗</span></a></div>
+    </div>
+   </div>
+   <div class="sb open" id="sb-1jue-b"><div class="sh" onclick="tb('sb-1jue-b')"><div class="sico is">🎯</div><div class="sm"><div class="sn">Manejo de Balón — Daily</div><div class="st">15 min</div></div><div class="sch">›</div></div>
+    <div class="sbd">
+     <div class="ex" id="e-1jue-b-1"><div class="ex-row"><div class="ex-chk" onclick="chk('1jue-b-1')"></div><div class="ex-main"><div class="ex-name">Rutina + Movimientos Compuestos</div><div class="ex-note">Crossover → entre piernas → reversa → hesitation. Sin pausa.</div></div><div class="ex-sets">15 min</div></div><a class="vlink" href="https://www.youtube.com/watch?v=oADaM2L1YLc" target="_blank"><div class="ytpill"></div><span class="vt">Daily Ball Handling — ILB Elite</span><span class="varr">↗</span></a></div>
+    </div>
+   </div>
+   <div class="ibar"><span class="ilbl">INTENSIDAD</span><div class="idots"><div class="idot on"></div><div class="idot on"></div><div class="idot on"></div><div class="idot half"></div><div class="idot"></div></div><span class="ilbl">Media–Alta</span></div>
+  </div>
+ </div>
+
+ <!-- VIE -->
+ <div class="dpanel" id="d-1vie">
+  <div class="day-card">
+   <div class="day-top"><h2>Viernes</h2><p>Pliometría PRIMERO + Gym Piernas · Manejo · Medición semanal</p><div class="day-tags"><span class="tag tp">Pliometría AM</span><span class="tag tg">Gym AM</span><span class="tag ts">Manejo</span></div></div>
+   <div class="day-prog"><div class="prog-bar"><div class="prog-fill" id="pg-1vie" style="width:0%"></div></div><div class="prog-lbl" id="pl-1vie">0%</div></div>
+   <div class="reset-row"><button class="reset-btn" onclick="resetDay('1vie')">Limpiar checks</button></div>
+   <div class="sb open" id="sb-1vie-a"><div class="sh" onclick="tb('sb-1vie-a')"><div class="sico ip">🦘</div><div class="sm"><div class="sn">Pliometría + Medición Vertical</div><div class="st">PRIMERO · 15 min</div></div><div class="sch">›</div></div>
+    <div class="sbd">
+     <div class="ex" id="e-1vie-a-1"><div class="ex-row"><div class="ex-chk" onclick="chk('1vie-a-1')"></div><div class="ex-main"><div class="ex-name">Depth Jumps — Caída + Explosión</div><div class="ex-note">Cajón 30–40 cm. Reflejo inmediato. Tiempo mínimo de contacto.</div></div><div class="ex-sets">4 × 5</div></div><a class="vlink" href="https://www.youtube.com/watch?v=wBVhVIqUPsI" target="_blank"><div class="ytpill"></div><span class="vt">Plyometrics para dunkar — Cuáles hacer</span><span class="varr">↗</span></a></div>
+     <div class="ex" id="e-1vie-a-2"><div class="ex-row"><div class="ex-chk" onclick="chk('1vie-a-2')"></div><div class="ex-main"><div class="ex-name">📏 Salto Máximo — Medición semanal</div><div class="ex-note">Marcar en pared. Registrar altura. Comparar cada viernes.</div></div><div class="ex-sets">3 × 3 máx</div></div><a class="vlink" href="https://www.youtube.com/watch?v=Z9TS3XmFDY4" target="_blank"><div class="ytpill"></div><span class="vt">6 Ejercicios Pliométricos — Salto</span><span class="varr">↗</span></a></div>
+    </div>
+   </div>
+   <div class="sb open" id="sb-1vie-b"><div class="sh" onclick="tb('sb-1vie-b')"><div class="sico ig">🏋️</div><div class="sm"><div class="sn">Gym + Acondicionamiento</div><div class="st">45 min · Split Squat + Suicidios</div></div><div class="sch">›</div></div>
+    <div class="sbd">
+     <div class="ex" id="e-1vie-b-1"><div class="ex-row"><div class="ex-chk" onclick="chk('1vie-b-1')"></div><div class="ex-main"><div class="ex-name">Sentadilla Búlgara</div><div class="ex-note">Mancuerna ligera mes 1. Corrige desequilibrios entre piernas.</div></div><div class="ex-sets">3 × 8/lado</div></div><a class="vlink" href="https://www.youtube.com/watch?v=2C-uNgKwPLE" target="_blank"><div class="ytpill"></div><span class="vt">Bulgarian Split Squat</span><span class="varr">↗</span></a></div>
+     <div class="ex" id="e-1vie-b-2"><div class="ex-row"><div class="ex-chk" onclick="chk('1vie-b-2')"></div><div class="ex-main"><div class="ex-name">Pallof Press — Core</div><div class="ex-note">Anti-rotacional. Protege columna en contacto físico.</div></div><div class="ex-sets">3 × 12</div></div><a class="vlink" href="https://www.youtube.com/watch?v=AH_QZLm_0-s" target="_blank"><div class="ytpill"></div><span class="vt">Pallof Press</span><span class="varr">↗</span></a></div>
+     <div class="ex" id="e-1vie-b-3"><div class="ex-row"><div class="ex-chk" onclick="chk('1vie-b-3')"></div><div class="ex-main"><div class="ex-name">Suicidios — 4 rondas</div><div class="ex-note">Mes 1: 4 rondas. Aumenta a 5–6 en mes 2.</div></div><div class="ex-sets">4 rondas</div></div><a class="vlink" href="https://www.youtube.com/watch?v=RopLge6K0ps" target="_blank"><div class="ytpill"></div><span class="vt">Basketball Suicides</span><span class="varr">↗</span></a></div>
+    </div>
+   </div>
+   <div class="sb open" id="sb-1vie-c"><div class="sh" onclick="tb('sb-1vie-c')"><div class="sico is">🎯</div><div class="sm"><div class="sn">Manejo de Balón — Daily</div><div class="st">15 min</div></div><div class="sch">›</div></div>
+    <div class="sbd">
+     <div class="ex" id="e-1vie-c-1"><div class="ex-row"><div class="ex-chk" onclick="chk('1vie-c-1')"></div><div class="ex-main"><div class="ex-name">Rutina diaria</div><div class="ex-note">La repetición constante construye el hábito motor.</div></div><div class="ex-sets">15 min</div></div><a class="vlink" href="https://www.youtube.com/watch?v=CLoWxOvlHkk" target="_blank"><div class="ytpill"></div><span class="vt">5 Min Ball Handling — ILB Elite</span><span class="varr">↗</span></a></div>
+    </div>
+   </div>
+   <div class="ibar"><span class="ilbl">INTENSIDAD</span><div class="idots"><div class="idot on"></div><div class="idot on"></div><div class="idot on"></div><div class="idot on"></div><div class="idot"></div></div><span class="ilbl">Alta</span></div>
+  </div>
+ </div>
+
+ <!-- SÁB -->
+ <div class="dpanel" id="d-1sab">
+  <div class="day-card">
+   <div class="day-top"><h2>Sábado</h2><p>Recuperación · Tiros · Manejo fino</p><div class="day-tags"><span class="tag tr">Recuperación</span><span class="tag tb">Shooting</span><span class="tag ts">Manejo fino</span></div></div>
+   <div class="day-prog"><div class="prog-bar"><div class="prog-fill" id="pg-1sab" style="width:0%"></div></div><div class="prog-lbl" id="pl-1sab">0%</div></div>
+   <div class="reset-row"><button class="reset-btn" onclick="resetDay('1sab')">Limpiar checks</button></div>
+   <div class="sb open" id="sb-1sab-a"><div class="sh" onclick="tb('sb-1sab-a')"><div class="sico ir">🧘</div><div class="sm"><div class="sn">Recuperación y Movilidad</div><div class="st">45 min</div></div><div class="sch">›</div></div>
+    <div class="sbd">
+     <div class="ex" id="e-1sab-a-1"><div class="ex-row"><div class="ex-chk" onclick="chk('1sab-a-1')"></div><div class="ex-main"><div class="ex-name">Foam Rolling — Piernas</div><div class="ex-note">IT band, cuádriceps, isquiotibiales, gemelos. 60–90 seg/zona.</div></div><div class="ex-sets">15 min</div></div><a class="vlink" href="https://www.youtube.com/watch?v=q2VuMkiJxYk" target="_blank"><div class="ytpill"></div><span class="vt">Foam Rolling Legs — Rutina completa</span><span class="varr">↗</span></a></div>
+     <div class="ex" id="e-1sab-a-2"><div class="ex-row"><div class="ex-chk" onclick="chk('1sab-a-2')"></div><div class="ex-main"><div class="ex-name">Elongación Estática</div><div class="ex-note">Hip flexors, glúteos, isquiotibiales. Aumenta rango de salto.</div></div><div class="ex-sets">20 min</div></div><a class="vlink" href="https://www.youtube.com/watch?v=sTxC3J3gQEU" target="_blank"><div class="ytpill"></div><span class="vt">Stretching para atletas basketball</span><span class="varr">↗</span></a></div>
+    </div>
+   </div>
+   <div class="sb open" id="sb-1sab-b"><div class="sh" onclick="tb('sb-1sab-b')"><div class="sico ib">🏀</div><div class="sm"><div class="sn">Shooting + Manejo Fino</div><div class="st">40 min · A tu ritmo · Sin presión</div></div><div class="sch">›</div></div>
+    <div class="sbd">
+     <div class="ex" id="e-1sab-b-1"><div class="ex-row"><div class="ex-chk" onclick="chk('1sab-b-1')"></div><div class="ex-main"><div class="ex-name">Form Shooting — Calidad total</div><div class="ex-note">150 tiros sin prisa. Mecánica perfecta cada tiro. Registrar %.</div></div><div class="ex-sets">150 tiros</div></div><a class="vlink" href="https://www.youtube.com/watch?v=UcnB9e5O5NY" target="_blank"><div class="ytpill"></div><span class="vt">Perfect Shooting Form — ILB Elite</span><span class="varr">↗</span></a></div>
+     <div class="ex" id="e-1sab-b-2"><div class="ex-row"><div class="ex-chk" onclick="chk('1sab-b-2')"></div><div class="ex-main"><div class="ex-name">Dribble de Rodillas</div><div class="ex-note">Sin impacto. Tacto y control fino. Ambas manos.</div></div><div class="ex-sets">15 min</div></div><a class="vlink" href="https://www.youtube.com/watch?v=WW_1g1eSSrM" target="_blank"><div class="ytpill"></div><span class="vt">Ball Handling Drills 2025</span><span class="varr">↗</span></a></div>
+    </div>
+   </div>
+   <div class="ibar"><span class="ilbl">INTENSIDAD</span><div class="idots"><div class="idot on"></div><div class="idot half"></div><div class="idot"></div><div class="idot"></div><div class="idot"></div></div><span class="ilbl">Baja</span></div>
+  </div>
+ </div>
+
+ <!-- DOM -->
+ <div class="dpanel" id="d-1dom">
+  <div class="day-card">
+   <div class="day-top"><h2>Domingo</h2><p>Descanso total — el músculo crece en reposo</p><div class="day-tags"><span class="tag tr">Descanso</span></div></div>
+   <div class="day-prog"><div class="prog-bar"><div class="prog-fill" id="pg-1dom" style="width:0%"></div></div><div class="prog-lbl" id="pl-1dom">0%</div></div>
+   <div class="sb open" id="sb-1dom-a"><div class="sh" onclick="tb('sb-1dom-a')"><div class="sico ir">😴</div><div class="sm"><div class="sn">Protocolo de Recuperación</div><div class="st">Todo el día</div></div><div class="sch">›</div></div>
+    <div class="sbd">
+     <div class="ex" id="e-1dom-a-1"><div class="ex-row"><div class="ex-chk" onclick="chk('1dom-a-1')"></div><div class="ex-main"><div class="ex-name">Sueño 8–9 horas</div><div class="ex-note">70% de la GH se libera en sueño profundo. Magnesio antes de dormir.</div></div><div class="ex-sets">Prioridad #1</div></div></div>
+     <div class="ex" id="e-1dom-a-2"><div class="ex-row"><div class="ex-chk" onclick="chk('1dom-a-2')"></div><div class="ex-main"><div class="ex-name">Hidratación 3–4 litros</div><div class="ex-note">Deshidratación reduce fuerza 10% y tiempo de reacción.</div></div><div class="ex-sets">Todo el día</div></div></div>
+     <div class="ex" id="e-1dom-a-3"><div class="ex-row"><div class="ex-chk" onclick="chk('1dom-a-3')"></div><div class="ex-main"><div class="ex-name">Film Study</div><div class="ex-note">Off-ball, defensa, spacing. El basketball mental también se entrena.</div></div><div class="ex-sets">Opcional</div></div><a class="vlink" href="https://www.youtube.com/watch?v=TkJfN-D5eI8" target="_blank"><div class="ytpill"></div><span class="vt">Film Study — Cómo estudiar basketball</span><span class="varr">↗</span></a></div>
+    </div>
+   </div>
+   <div class="ibar"><span class="ilbl">INTENSIDAD</span><div class="idots"><div class="idot"></div><div class="idot"></div><div class="idot"></div><div class="idot"></div><div class="idot"></div></div><span class="ilbl">Cero</span></div>
+  </div>
+ </div>
+</div><!-- /mp1 -->
+
+<!-- ═══ MES 2 ═══ -->
+<div class="mpanel" id="mp2">
+ <div class="mhdr"><h2>Mes 2 — Desarrollo</h2><p>Sem 5–8 · +5–8% peso semanal · RPE 7–8 · Cajón 45–55 cm</p><span class="pbadge pb2">FASE DESARROLLO</span></div>
+ <div class="mbanner b-amber"><div class="bico">📈</div><div class="bbody"><h4>Cambios vs Mes 1</h4><ul><li><b>Gym:</b> +5–8% peso en todos los compuestos. Mismo volumen.</li><li><b>Pliometría:</b> cajón sube a 45–55 cm. Depth Jumps más reactivos.</li><li><b>Basketball:</b> Drive & Finish ambas manos. Catch & Shoot desde 3 pts.</li><li><b>Manejo:</b> hesitation en movimiento con cono como defensor.</li><li><b>Suicidios:</b> aumentan a 5 rondas.</li><li><b>Nuevo ejercicio:</b> Hang Clean 4×4 el martes AM (sistema nervioso fresco).</li><li><b>Tiros:</b> 150 técnicos + 50 free throws por sesión.</li></ul></div></div>
+ <div class="mbanner b-blue"><div class="bico">📊</div><div class="bbody"><h4>Métricas a registrar</h4><ul><li>Salto vertical cada viernes — comparar vs semana 4</li><li>% Free Throws (meta: superar 65%)</li><li>Peso en Squat, Bench y RDL</li><li>Tiempo suicidios — debe bajar 3–5 seg</li></ul></div></div>
+</div>
+
+<!-- ═══ MES 3 ═══ -->
+<div class="mpanel" id="mp3">
+ <div class="mhdr"><h2>Mes 3 — Intensidad</h2><p>Sem 9–12 · Cerca del fallo · RPE 8–9 · Scrimmage cronometrado</p><span class="pbadge pb3">FASE INTENSIDAD</span></div>
+ <div class="mbanner b-red"><div class="bico">🔥</div><div class="bbody"><h4>Cambios vs Mes 2</h4><ul><li><b>Gym:</b> bajar a 4–5 reps, subir peso. Fuerza máxima.</li><li><b>Pliometría:</b> cajón 55–65 cm. Single-Leg Box Jump.</li><li><b>Basketball:</b> juego situacional cronometrado. Pick & Roll real.</li><li><b>Manejo:</b> dribble con defensor activo (compañero).</li><li><b>Suicidios:</b> 6–7 rondas + sprints 30m con cambio de dirección.</li><li><b>Tiros:</b> 200+ por sesión. Mid-range + tres puntos post-movimiento.</li></ul></div></div>
+ <div class="mbanner b-amber"><div class="bico">⚠️</div><div class="bbody"><h4>Vigilar en Mes 3</h4><ul><li>Rendimiento en cancha cae → reducir gym</li><li>Sueño &lt;7h más de 3 noches → deload</li><li>Dolor articular (no muscular) → parar</li><li>Semana 12 = deload: reducir todo al 50%</li></ul></div></div>
+ <div class="mbanner b-blue"><div class="bico">📊</div><div class="bbody"><h4>Evaluaciones al final</h4><ul><li>1RM estimado Squat y Bench Press</li><li>Salto vertical vs semana 1 (meta: +5–8 cm)</li><li>% Free Throws (meta: 70%+)</li><li>Peso corporal y composición visual</li></ul></div></div>
+</div>
+
+<!-- ═══ MES 4 ═══ -->
+<div class="mpanel" id="mp4">
+ <div class="mhdr"><h2>Mes 4 — Peak / Competición</h2><p>Sem 13–16 · Gym en mantenimiento · Cancha al máximo</p><span class="pbadge pb4">FASE PEAK</span></div>
+ <div class="mbanner b-green"><div class="bico">🏆</div><div class="bbody"><h4>Filosofía del Mes 4</h4><p>Ya no se busca músculo ni fuerza — se busca <b>expresar en cancha todo lo construido</b>. Gym 2 días/semana. Basketball 4–5 días. Enfoque: velocidad, lectura de juego y confianza.</p></div></div>
+ <div class="mbanner b-blue"><div class="bico">📅</div><div class="bbody"><h4>Estructura semanal</h4><ul><li><b>Lun:</b> Basketball competitivo + manejo</li><li><b>Mar:</b> Gym mantenimiento (2/3 del vol) + pliometría ligera</li><li><b>Mié:</b> Basketball técnico + 300+ tiros</li><li><b>Jue:</b> Gym mantenimiento + acondicionamiento suave</li><li><b>Vie:</b> Basketball competitivo / scrimmage</li><li><b>Sáb:</b> Recuperación + shooting + manejo fino</li><li><b>Dom:</b> Descanso total</li></ul></div></div>
+ <div class="mbanner b-amber"><div class="bico">🔄</div><div class="bbody"><h4>Al terminar el Mes 4</h4><p>1 semana de descanso activo. Luego reiniciar desde Mes 1 con los pesos actuales como nueva base. El segundo ciclo empieza donde terminó este.</p></div></div>
+</div>
+
 <!-- NUTRICIÓN -->
-<!-- ═══════════════════════════════════════════════ -->
-<div class="section" style="padding-top:0">
-  <div class="section-title"><span>04.</span> NUTRICIÓN Y SUPLEMENTACIÓN</div>
-  <div class="section-line"></div>
-  <div class="nut-grid">
-    <div class="nut-card"><div class="nut-val">2,900</div><div class="nut-unit">kcal</div><div class="nut-label">Doble sesión</div></div>
-    <div class="nut-card"><div class="nut-val">2,500</div><div class="nut-unit">kcal</div><div class="nut-label">Gym solo</div></div>
-    <div class="nut-card"><div class="nut-val">145</div><div class="nut-unit">g/día</div><div class="nut-label">Proteína (2g/kg)</div></div>
-    <div class="nut-card"><div class="nut-val">350</div><div class="nut-unit">g/día</div><div class="nut-label">Carbohidratos</div></div>
-    <div class="nut-card"><div class="nut-val">70</div><div class="nut-unit">g/día</div><div class="nut-label">Grasas</div></div>
-    <div class="nut-card"><div class="nut-val">3.5</div><div class="nut-unit">L/día</div><div class="nut-label">Agua</div></div>
-  </div>
-  <div class="supp-wrap" style="margin-bottom:16px">
-    <table class="supp-table">
-      <thead><tr><th>Suplemento</th><th>Dosis</th><th>Momento</th><th>Estado</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Creatina</strong></td><td>5g/día</td><td>Post-entreno con batido</td><td><span class="badge">✓ Óptimo</span></td></tr>
-        <tr><td><strong>Proteína Whey</strong></td><td>30–40g</td><td>Post-entreno (30 min máx)</td><td><span class="badge">✓ Óptimo</span></td></tr>
-        <tr><td><strong>Vitaminas</strong></td><td>Etiqueta</td><td>Con desayuno</td><td><span class="badge">✓ Continuar</span></td></tr>
-        <tr><td><strong>Magnesio</strong> (añadir)</td><td>300–400mg</td><td>Antes de dormir</td><td><span class="badge warn">⚠ Agregar</span></td></tr>
-        <tr><td><strong>Omega-3</strong> (añadir)</td><td>2–3g EPA+DHA</td><td>Con comida</td><td><span class="badge warn">⚠ Considerar</span></td></tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="tips-grid">
-    <div class="tip-card"><div class="tip-icon">🕐</div><div class="tip-content"><strong>Pre-entreno (1h antes)</strong>Arroz + pollo o avena + banana. Carbos de absorción media para energía sostenida.</div></div>
-    <div class="tip-card"><div class="tip-icon">⚡</div><div class="tip-content"><strong>Post-entreno (30 min)</strong>Batido + banana + creatina 5g. No esperar más de 45 min.</div></div>
-    <div class="tip-card"><div class="tip-icon">🌙</div><div class="tip-content"><strong>Antes de dormir</strong>Requesón o yogur griego. Proteína lenta para síntesis nocturna de músculo.</div></div>
-    <div class="tip-card"><div class="tip-icon">🍚</div><div class="tip-content"><strong>Carbos siempre</strong>Arroz, avena, papa dulce. Son el combustible del basketball, nunca eliminarlos.</div></div>
-  </div>
+<div class="sec-hd"><div class="sec-lbl">Nutrición</div><div class="sec-title">Targets Diarios</div></div>
+<div class="nut-grid">
+ <div class="nc"><div class="nv" id="nK1">2,900</div><div class="nu">kcal</div><div class="nl">Doble sesión</div></div>
+ <div class="nc"><div class="nv" id="nK2">2,500</div><div class="nu">kcal</div><div class="nl">Gym solo</div></div>
+ <div class="nc"><div class="nv" id="nPr">145</div><div class="nu">g/día</div><div class="nl">Proteína</div></div>
+ <div class="nc"><div class="nv" id="nCb">350</div><div class="nu">g/día</div><div class="nl">Carbos</div></div>
+ <div class="nc"><div class="nv" id="nFt">70</div><div class="nu">g/día</div><div class="nl">Grasas</div></div>
+ <div class="nc"><div class="nv">3.5</div><div class="nu">L/día</div><div class="nl">Agua</div></div>
 </div>
 
-<footer>
-  <p>BASKETBALL ELITE PLAN &nbsp;|&nbsp; <span>179 cm · 73 kg</span> · Creatina + Proteína + Vitaminas</p>
-  <p>Revisar y ajustar cada 4 semanas según progreso real ⚡</p>
-  <p style="margin-top:8px;font-size:10px;color:#444">Videos ✅ verificados · Toca cualquier botón rojo para ver el tutorial en YouTube</p>
-</footer>
+</div><!-- /page -->
+<footer><p><b id="fN">Basketball Plan</b> · <span id="fA">—</span> cm · <span id="fP">—</span> kg</p><p>4 meses de periodización · Actualizar peso al inicio de cada mes</p></footer>
 
 <script>
-function showDay(id, tab) {
-  document.querySelectorAll('.day-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('day-' + id).classList.add('active');
-  tab.scrollIntoView({ behavior:'smooth', block:'nearest', inline:'center' });
-  tab.classList.add('active');
+// ── CHECKS + PROGRESS ───────────────────────────
+var C = {};
+
+function chk(key) {
+  var el  = document.getElementById('e-' + key);
+  var box = el && el.querySelector('.ex-chk');
+  if (!el || !box) return;
+  C[key] = !C[key];
+  box.classList.toggle('on', !!C[key]);
+  el.classList.toggle('done', !!C[key]);
+  saveC(); updProg(key.split('-')[0]);
 }
+
+function updProg(day) {
+  var all = Array.from(document.querySelectorAll('[id^="e-' + day + '-"]'))
+                 .map(function(e){ return e.id.replace('e-',''); });
+  var done = all.filter(function(k){ return C[k]; }).length;
+  var pct  = all.length ? Math.round(done/all.length*100) : 0;
+  var bar  = document.getElementById('pg-' + day);
+  var lbl  = document.getElementById('pl-' + day);
+  if (bar) bar.style.width = pct + '%';
+  if (lbl) lbl.textContent = pct + '%';
+}
+
+function resetDay(day) {
+  Object.keys(C).filter(function(k){ return k.startsWith(day+'-'); }).forEach(function(k){
+    C[k] = false;
+    var el  = document.getElementById('e-' + k);
+    var box = el && el.querySelector('.ex-chk');
+    if (box) box.classList.remove('on');
+    if (el)  el.classList.remove('done');
+  });
+  saveC(); updProg(day);
+}
+
+function saveC() { localStorage.setItem('bball_c', JSON.stringify(C)); }
+
+function loadC() {
+  try {
+    C = JSON.parse(localStorage.getItem('bball_c') || '{}');
+    Object.keys(C).forEach(function(k) {
+      if (!C[k]) return;
+      var el  = document.getElementById('e-' + k);
+      var box = el && el.querySelector('.ex-chk');
+      if (box) box.classList.add('on');
+      if (el)  el.classList.add('done');
+    });
+    ['1lun','1mar','1mie','1jue','1vie','1sab','1dom'].forEach(updProg);
+  } catch(e){}
+}
+
+// ── ANÁLISIS colapsable ──────────────────────────
+var analOpen = false;
+function toggleAnal() {
+  analOpen = !analOpen;
+  document.getElementById('abody').classList.toggle('open', analOpen);
+  document.getElementById('atolbl').textContent = analOpen ? 'Cerrar ›' : 'Ver análisis ›';
+}
+function closeAnal() {
+  analOpen = false;
+  document.getElementById('abody').classList.remove('open');
+  document.getElementById('atolbl').textContent = 'Ver análisis ›';
+}
+
+// ── TABS ────────────────────────────────────────
+function showMonth(n, el) {
+  document.querySelectorAll('.mpanel').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.mtab').forEach(function(t){ t.classList.remove('active'); });
+  document.getElementById('mp' + n).classList.add('active');
+  el.classList.add('active');
+  document.getElementById('hMes').textContent = 'Mes ' + n;
+  localStorage.setItem('bball_mes', n);
+  el.scrollIntoView({ behavior:'smooth', block:'nearest', inline:'center' });
+}
+
+function showDay(id, el) {
+  document.querySelectorAll('.dpanel').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.dtab').forEach(function(t){ t.classList.remove('active'); });
+  var p = document.getElementById('d-' + id);
+  if (p) p.classList.add('active');
+  el.classList.add('active');
+  el.scrollIntoView({ behavior:'smooth', block:'nearest', inline:'center' });
+}
+
+function tb(id) { document.getElementById(id).classList.toggle('open'); }
+
+// ── MODAL ───────────────────────────────────────
+function openModal() { document.getElementById('overlay').classList.remove('hidden'); }
+
+function applyProfile() {
+  var n  = document.getElementById('iN').value.trim() || 'Atleta';
+  var a  = parseFloat(document.getElementById('iA').value) || 179;
+  var p  = parseFloat(document.getElementById('iP').value) || 73;
+  var po = document.getElementById('iPos').value;
+  var nv = document.getElementById('iNiv').value;
+  var pt = Math.round(p*2), k1 = Math.round(p*40), k2 = Math.round(p*34);
+  var cb = Math.round(p*4.8), ft = Math.round(p*0.95);
+
+  document.getElementById('hN').textContent  = n;
+  document.getElementById('hA').textContent  = a;
+  document.getElementById('hP').textContent  = p;
+  document.getElementById('hPo').textContent = po.split(' ')[0];
+  document.getElementById('nK1').textContent = k1.toLocaleString();
+  document.getElementById('nK2').textContent = k2.toLocaleString();
+  document.getElementById('nPr').textContent = pt;
+  document.getElementById('nCb').textContent = cb;
+  document.getElementById('nFt').textContent = ft;
+  document.getElementById('fN').textContent  = n;
+  document.getElementById('fA').textContent  = a;
+  document.getElementById('fP').textContent  = p;
+
+  localStorage.setItem('bball_profile', JSON.stringify({n,a,p,po,nv}));
+  document.getElementById('overlay').classList.add('hidden');
+}
+
+// ── INIT ────────────────────────────────────────
+window.onload = function() {
+  try {
+    var pr = JSON.parse(localStorage.getItem('bball_profile') || 'null');
+    if (pr) {
+      document.getElementById('iN').value   = pr.n || '';
+      document.getElementById('iA').value   = pr.a || '';
+      document.getElementById('iP').value   = pr.p || '';
+      document.getElementById('iPos').value = pr.po || '';
+      document.getElementById('iNiv').value = pr.nv || '';
+      applyProfile();
+    } else { document.getElementById('overlay').classList.remove('hidden'); }
+  } catch(e) { document.getElementById('overlay').classList.remove('hidden'); }
+
+  var mes = localStorage.getItem('bball_mes') || '1';
+  if (mes !== '1') {
+    var mt = document.querySelectorAll('.mtab')[parseInt(mes)-1];
+    if (mt) showMonth(parseInt(mes), mt);
+  }
+  loadC();
+};
 </script>
 </body>
 </html>
